@@ -3,8 +3,15 @@
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export function LogoutButton() {
+export function LogoutButton({
+  className,
+  label = "Salir",
+}: {
+  className?: string;
+  label?: string;
+}) {
   const router = useRouter();
 
   async function onLogout() {
@@ -15,8 +22,8 @@ export function LogoutButton() {
   }
 
   return (
-    <Button variant="ghost" onClick={onLogout}>
-      Salir
+    <Button variant="ghost" onClick={onLogout} className={cn(className)}>
+      {label}
     </Button>
   );
 }

@@ -36,11 +36,11 @@ export const THERAPIST_NAV: NavItem[] = [
 ];
 
 export const ADMIN_NAV: NavItem[] = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/clinics", label: "Sedes" },
-  { href: "/admin/users", label: "Usuarios" },
-  { href: "/admin/invitation-codes", label: "Códigos" },
-  { href: "/admin/appointments", label: "Agenda" },
-  { href: "/admin/exercises", label: "Ejercicios" },
-  { href: "/admin/reports", label: "Reportes" },
+  { href: "/admin", label: "Dashboard", icon: "◼" },
+  { href: "/admin/clinics", label: "Sedes", icon: "▦" },
+  { href: "/admin/users", label: "Usuarios", icon: "◉" },
+  { href: "/admin/invitation-codes", label: "Códigos", icon: "⌗" },
+  { href: "/admin/appointments", label: "Agenda", icon: "◷" },
+  { href: "/admin/exercises", label: "Ejercicios", icon: "✕" },
+  { href: "/admin/reports", label: "Reportes", icon: "◫" },
 ];
