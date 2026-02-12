@@ -53,22 +53,36 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
-        <label className="mb-1 block text-sm font-medium">Correo</label>
-        <Input type="email" {...register("email")} placeholder="correo@ejemplo.com" />
-        {errors.email ? <p className="mt-1 text-xs text-rose-700">{errors.email.message}</p> : null}
+        <label className="mb-2 block text-3xl font-semibold text-[#1f2a45]">Correo</label>
+        <Input
+          type="email"
+          {...register("email")}
+          placeholder="correo@ejemplo.com"
+          className="h-16 rounded-2xl border-slate-300 px-5 text-2xl"
+        />
+        {errors.email ? <p className="mt-2 text-xl text-rose-700">{errors.email.message}</p> : null}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Contraseña</label>
-        <Input type="password" {...register("password")} placeholder="********" />
-        {errors.password ? <p className="mt-1 text-xs text-rose-700">{errors.password.message}</p> : null}
+        <label className="mb-2 block text-3xl font-semibold text-[#1f2a45]">Contraseña</label>
+        <Input
+          type="password"
+          {...register("password")}
+          placeholder="********"
+          className="h-16 rounded-2xl border-slate-300 px-5 text-2xl"
+        />
+        {errors.password ? <p className="mt-2 text-xl text-rose-700">{errors.password.message}</p> : null}
       </div>
 
-      {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+      {error ? <p className="text-xl text-rose-700">{error}</p> : null}
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button
+        type="submit"
+        className="mt-1 h-16 w-full rounded-2xl bg-[#4d74b9] text-3xl font-semibold hover:bg-[#4066aa]"
+        disabled={loading}
+      >
         {loading ? "Ingresando..." : "Iniciar sesión"}
       </Button>
     </form>
