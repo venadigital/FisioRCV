@@ -5,19 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 
-type PersonOption = {
+type Option = {
   id: string;
   label: string;
 };
 
 export function AppointmentForm({
-  clinicId,
+  defaultClinicId,
+  clinics,
   patients,
   therapists,
 }: {
-  clinicId: string;
-  patients: PersonOption[];
-  therapists: PersonOption[];
+  defaultClinicId: string;
+  clinics: Option[];
+  patients: Option[];
+  therapists: Option[];
 }) {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,8 @@ export function AppointmentForm({
     setLoading(true);
     setMessage(null);
 
-    const scheduledAt = new Date(formData.get("scheduledAt") as string);
+    const scheduledAtValue = formData.get("scheduledAt") as string;
+    const scheduledAt = new Date(scheduledAtValue);
 
     const response = await fetch("/api/appointments", {
       method: "POST",
@@ -34,7 +37,7 @@ export function AppointmentForm({
       body: JSON.stringify({
         patientId: formData.get("patientId"),
         therapistId: formData.get("therapistId"),
-        clinicId,
+        clinicId: formData.get("clinicId") || defaultClinicId,
         scheduledAtUtc: scheduledAt.toISOString(),
       }),
     });
@@ -49,39 +52,60 @@ export function AppointmentForm({
       action={async (formData) => {
         await onSubmit(formData);
       }}
-      className="space-y-3"
+      className="space-y-5"
     >
-      <div>
-        <label className="mb-1 block text-sm font-medium">Paciente</label>
-        <Select name="patientId" required>
-          {patients.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+      <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+        <div>
+          <label className="mb-2 block text-2xl font-medium text-slate-800">Sede</label>
+          <Select name="clinicId" defaultValue={defaultClinicId} required className="h-12 rounded-xl px-4 text-xl">
+            {clinics.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-2xl font-medium text-slate-800">Paciente</label>
+          <Select name="patientId" required className="h-12 rounded-xl px-4 text-xl">
+            <option value="">Buscar paciente...</option>
+            {patients.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </Select>
+        </div>
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium">Terapeuta</label>
-        <Select name="therapistId" required>
-          {therapists.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+      <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
+        <div>
+          <label className="mb-2 block text-2xl font-medium text-slate-800">Terapeuta</label>
+          <Select name="therapistId" required className="h-12 rounded-xl px-4 text-xl">
+            <option value="">Seleccionar terapeuta</option>
+            {therapists.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-2xl font-medium text-slate-800">Fecha y hora</label>
+          <Input name="scheduledAt" type="datetime-local" required className="h-12 rounded-xl px-4 text-xl" />
+        </div>
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium">Fecha y hora</label>
-        <Input name="scheduledAt" type="datetime-local" required />
-      </div>
+      {message ? <p className="text-lg text-slate-700">{message}</p> : null}
 
-      {message ? <p className="text-sm text-slate-700">{message}</p> : null}
-
-      <Button type="submit" disabled={loading}>
-        {loading ? "Guardando..." : "Crear cita"}
+      <Button
+        type="submit"
+        disabled={loading}
+        className="h-12 rounded-xl bg-[#5478bd] px-7 text-2xl font-semibold text-white hover:bg-[#4364a2]"
+      >
+        + {loading ? "Creando..." : "Crear cita"}
       </Button>
     </form>
   );

@@ -40,7 +40,7 @@ export const ADMIN_NAV: NavItem[] = [
   { href: "/admin/clinics", label: "Sedes", icon: "▦" },
   { href: "/admin/users", label: "Usuarios", icon: "◉" },
   { href: "/admin/invitation-codes", label: "Códigos", icon: "⌗" },
-  { href: "/admin/appointments", label: "Agenda", icon: "◷" },
+  { href: "/admin/appointments", label: "Agenda Maestra", icon: "◷" },
   { href: "/admin/exercises", label: "Ejercicios", icon: "✕" },
   { href: "/admin/reports", label: "Reportes", icon: "◫" },
 ];
