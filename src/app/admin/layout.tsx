@@ -6,7 +6,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const context = await requireRole("admin");
 
   return (
-    <AdminShell subtitle={context.fullName ? `Hola, ${context.fullName}` : "Gestión clínica"} nav={ADMIN_NAV}>
+    <AdminShell fullName={context.fullName} nav={ADMIN_NAV}>
       {children}
     </AdminShell>
   );
