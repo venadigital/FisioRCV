@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@tailwindcss/postcss": "^4",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.8.0",
@@ -22,14 +25,11 @@
     "react-hook-form": "^7.71.1",
     "recharts": "^3.7.0",
     "tailwindcss": "^4",
+    "typescript": "^5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "typescript": "^5"
+    "eslint-config-next": "16.1.6"
   }
 }
