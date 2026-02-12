@@ -131,13 +131,36 @@ create table if not exists public.appointments (
   created_at timestamptz not null default now()
 );
 
-alter table public.appointments
-  add constraint appointments_no_overlap
-  exclude using gist (
-    therapist_id with =,
-    tstzrange(scheduled_at, scheduled_at + make_interval(mins => duration_minutes), '[)') with &&
-  )
-  where (status in ('scheduled', 'completed'));
+create or replace function public.prevent_appointment_overlap()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.status in ('scheduled', 'completed') and exists (
+    select 1
+    from public.appointments a
+    where a.therapist_id = new.therapist_id
+      and a.id <> coalesce(new.id, '00000000-0000-0000-0000-000000000000'::uuid)
+      and a.status in ('scheduled', 'completed')
+      and a.scheduled_at < (new.scheduled_at + interval '30 minutes')
+      and (a.scheduled_at + interval '30 minutes') > new.scheduled_at
+  ) then
+    raise exception 'La cita se solapa con otra existente para el terapeuta'
+      using errcode = '23P01';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_prevent_appointment_overlap on public.appointments;
+create trigger trg_prevent_appointment_overlap
+before insert or update of therapist_id, scheduled_at, status
+on public.appointments
+for each row
+execute function public.prevent_appointment_overlap();
 
 create table if not exists public.sessions (
   id uuid primary key default gen_random_uuid(),
