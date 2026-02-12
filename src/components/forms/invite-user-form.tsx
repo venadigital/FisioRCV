@@ -37,20 +37,35 @@ export function InviteUserForm({ clinicId }: { clinicId: string }) {
       action={async (formData) => {
         await onSubmit(formData);
       }}
-      className="space-y-3"
+      className="space-y-4"
     >
-      <Input name="fullName" placeholder="Nombre completo" required />
-      <Input type="email" name="email" placeholder="correo@centro.com" required />
-      <Input name="phone" placeholder="Teléfono" required />
-      <Select name="role" defaultValue="therapist">
+      <Input
+        name="fullName"
+        placeholder="Nombre completo"
+        required
+        className="h-14 rounded-xl border-slate-300 px-4 text-2xl"
+      />
+      <Input
+        type="email"
+        name="email"
+        placeholder="correo@centro.com"
+        required
+        className="h-14 rounded-xl border-slate-300 px-4 text-2xl"
+      />
+      <Input name="phone" placeholder="Teléfono" required className="h-14 rounded-xl border-slate-300 px-4 text-2xl" />
+      <Select name="role" defaultValue="therapist" className="h-14 rounded-xl border-slate-300 px-4 text-2xl">
         <option value="therapist">Fisioterapeuta</option>
         <option value="admin">Admin</option>
         <option value="patient">Paciente</option>
       </Select>
 
-      {message ? <p className="text-sm text-slate-700">{message}</p> : null}
+      {message ? <p className="text-2xl text-slate-700">{message}</p> : null}
 
-      <Button type="submit" disabled={loading}>
+      <Button
+        type="submit"
+        disabled={loading}
+        className="h-14 rounded-xl bg-[#0e7a9a] px-8 text-2xl font-semibold text-white hover:bg-[#0b6682]"
+      >
         {loading ? "Enviando..." : "Invitar usuario"}
       </Button>
     </form>

@@ -1,9 +1,37 @@
 import { InviteUserForm } from "@/components/forms/invite-user-form";
 import { Card } from "@/components/ui/card";
-import { PageHeader } from "@/components/ui/page-header";
-import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/auth/server";
+
+type RoleLabel = "admin" | "therapist" | "patient" | "sin rol";
+
+function roleTag(role: RoleLabel) {
+  if (role === "admin") {
+    return <span className="rounded-full bg-slate-200 px-3 py-1 text-xl font-medium text-slate-700">admin</span>;
+  }
+
+  if (role === "therapist") {
+    return (
+      <span className="rounded-full bg-[#dbe9ff] px-3 py-1 text-xl font-medium text-[#2f5cae]">fisioterapeuta</span>
+    );
+  }
+
+  if (role === "patient") {
+    return <span className="rounded-full bg-[#e8f5ff] px-3 py-1 text-xl font-medium text-[#1d7395]">paciente</span>;
+  }
+
+  return <span className="rounded-full bg-slate-100 px-3 py-1 text-xl font-medium text-slate-500">sin rol</span>;
+}
+
+function stateTag(active: boolean) {
+  if (active) {
+    return <span className="rounded-full bg-[#dff4e5] px-3 py-1 text-xl font-medium text-[#2a885b]">activo</span>;
+  }
+
+  return (
+    <span className="rounded-full bg-[#fff3d7] px-3 py-1 text-xl font-medium text-[#9a7320]">pendiente</span>
+  );
+}
 
 export default async function AdminUsersPage() {
   const context = await requireRole("admin");
@@ -19,37 +47,72 @@ export default async function AdminUsersPage() {
     supabase.from("user_roles").select("user_id, role"),
   ]);
 
-  const roleMap = new Map((rolesResult.data ?? []).map((item) => [item.user_id, item.role]));
+  const profiles = profilesResult.data ?? [];
+  const roles = rolesResult.data ?? [];
+
+  const roleMap = new Map(roles.map((item) => [item.user_id, item.role]));
+  const visibleRows = profiles.slice(0, 12);
 
   return (
-    <div className="space-y-6">
-      <PageHeader title="Gestión de usuarios" description="Crear usuarios y revisar estado de cuenta." />
+    <div className="space-y-7">
+      <header>
+        <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Gestión de usuarios</h1>
+        <p className="mt-2 text-4xl text-slate-500">Crear usuarios y revisar estado de cuenta.</p>
+      </header>
 
       {context.clinicId ? (
-        <Card>
-          <h2 className="mb-3 text-lg font-semibold">Invitar usuario</h2>
-          <InviteUserForm clinicId={context.clinicId} />
+        <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
+          <div className="p-8">
+            <h2 className="mb-6 text-5xl font-semibold tracking-tight text-slate-800">Invitar usuario</h2>
+            <InviteUserForm clinicId={context.clinicId} />
+          </div>
         </Card>
       ) : null}
 
-      <Card>
-        <h2 className="mb-3 text-lg font-semibold">Usuarios de la sede</h2>
-        <ul className="space-y-2 text-sm">
-          {(profilesResult.data ?? []).map((profile) => (
-            <li key={profile.id} className="flex items-center justify-between rounded-md border border-slate-200 p-3">
-              <div>
-                <p className="font-semibold text-slate-900">{profile.full_name}</p>
-                <p className="text-slate-600">{profile.phone}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge>{roleMap.get(profile.id) ?? "sin rol"}</Badge>
-                <Badge tone={profile.active ? "success" : "danger"}>
-                  {profile.active ? "activo" : "inactivo"}
-                </Badge>
-              </div>
-            </li>
-          ))}
+      <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
+        <div className="border-b border-slate-200 px-8 py-6">
+          <h2 className="text-5xl font-semibold tracking-tight text-slate-800">Usuarios de la sede</h2>
+        </div>
+
+        <ul>
+          {visibleRows.length === 0 ? (
+            <li className="px-8 py-8 text-2xl text-slate-500">No hay usuarios registrados.</li>
+          ) : (
+            visibleRows.map((profile) => {
+              const role = (roleMap.get(profile.id) ?? "sin rol") as RoleLabel;
+
+              return (
+                <li
+                  key={profile.id}
+                  className="flex items-center justify-between gap-4 border-b border-slate-200 px-8 py-6 last:border-b-0"
+                >
+                  <div>
+                    <p className="text-4xl font-medium text-slate-900">{profile.full_name}</p>
+                    <p className="mt-1 text-3xl text-slate-500">{profile.phone}</p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {roleTag(role)}
+                    {stateTag(Boolean(profile.active))}
+                  </div>
+                </li>
+              );
+            })
+          )}
         </ul>
+
+        <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
+          <p className="text-3xl text-slate-500">
+            Mostrando 1 a {Math.min(visibleRows.length, 12)} de {profiles.length} resultados
+          </p>
+
+          <div className="flex overflow-hidden rounded-xl border border-slate-300 text-2xl">
+            <button className="h-12 w-12 border-r border-slate-300 text-slate-500">‹</button>
+            <button className="h-12 w-12 border-r border-slate-300 bg-[#d5e5eb] font-semibold text-[#0e7a9a]">1</button>
+            <button className="h-12 w-12 border-r border-slate-300 text-slate-600">2</button>
+            <button className="h-12 w-12 text-slate-600">›</button>
+          </div>
+        </div>
       </Card>
     </div>
   );
