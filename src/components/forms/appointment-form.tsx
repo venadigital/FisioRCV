@@ -56,7 +56,7 @@ export function AppointmentForm({
     >
       <div className="grid gap-4 md:grid-cols-[220px_1fr]">
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Sede</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Sede</label>
           <Select name="clinicId" defaultValue={defaultClinicId} required className="h-12 rounded-xl px-4 text-xl">
             {clinics.map((item) => (
               <option key={item.id} value={item.id}>
@@ -67,7 +67,7 @@ export function AppointmentForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Paciente</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Paciente</label>
           <Select name="patientId" required className="h-12 rounded-xl px-4 text-xl">
             <option value="">Buscar paciente...</option>
             {patients.map((item) => (
@@ -81,7 +81,7 @@ export function AppointmentForm({
 
       <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Terapeuta</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Terapeuta</label>
           <Select name="therapistId" required className="h-12 rounded-xl px-4 text-xl">
             <option value="">Seleccionar terapeuta</option>
             {therapists.map((item) => (
@@ -93,7 +93,7 @@ export function AppointmentForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Fecha y hora</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Fecha y hora</label>
           <Input name="scheduledAt" type="datetime-local" required className="h-12 rounded-xl px-4 text-xl" />
         </div>
       </div>
@@ -103,7 +103,7 @@ export function AppointmentForm({
       <Button
         type="submit"
         disabled={loading}
-        className="h-12 rounded-xl bg-[#5478bd] px-7 text-2xl font-semibold text-white hover:bg-[#4364a2]"
+        className="h-12 rounded-xl bg-[#5478bd] px-7 text-base font-semibold text-white hover:bg-[#4364a2]"
       >
         + {loading ? "Creando..." : "Crear cita"}
       </Button>

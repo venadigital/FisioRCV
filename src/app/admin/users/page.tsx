@@ -56,14 +56,14 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-7">
       <header>
-        <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Gestión de usuarios</h1>
-        <p className="mt-2 text-4xl text-slate-500">Crear usuarios y revisar estado de cuenta.</p>
+        <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Gestión de usuarios</h1>
+        <p className="mt-2 text-2xl text-slate-500">Crear usuarios y revisar estado de cuenta.</p>
       </header>
 
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 text-5xl font-semibold tracking-tight text-slate-800">Invitar usuario</h2>
+            <h2 className="mb-6 text-3xl font-semibold tracking-tight text-slate-800">Invitar usuario</h2>
             <InviteUserForm clinicId={context.clinicId} />
           </div>
         </Card>
@@ -71,12 +71,12 @@ export default async function AdminUsersPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="border-b border-slate-200 px-8 py-6">
-          <h2 className="text-5xl font-semibold tracking-tight text-slate-800">Usuarios de la sede</h2>
+          <h2 className="text-3xl font-semibold tracking-tight text-slate-800">Usuarios de la sede</h2>
         </div>
 
         <ul>
           {visibleRows.length === 0 ? (
-            <li className="px-8 py-8 text-2xl text-slate-500">No hay usuarios registrados.</li>
+            <li className="px-8 py-8 text-base text-slate-500">No hay usuarios registrados.</li>
           ) : (
             visibleRows.map((profile) => {
               const role = (roleMap.get(profile.id) ?? "sin rol") as RoleLabel;
@@ -87,8 +87,8 @@ export default async function AdminUsersPage() {
                   className="flex items-center justify-between gap-4 border-b border-slate-200 px-8 py-6 last:border-b-0"
                 >
                   <div>
-                    <p className="text-4xl font-medium text-slate-900">{profile.full_name}</p>
-                    <p className="mt-1 text-3xl text-slate-500">{profile.phone}</p>
+                    <p className="text-2xl font-medium text-slate-900">{profile.full_name}</p>
+                    <p className="mt-1 text-xl text-slate-500">{profile.phone}</p>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -102,11 +102,11 @@ export default async function AdminUsersPage() {
         </ul>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-3xl text-slate-500">
+          <p className="text-xl text-slate-500">
             Mostrando 1 a {Math.min(visibleRows.length, 12)} de {profiles.length} resultados
           </p>
 
-          <div className="flex overflow-hidden rounded-xl border border-slate-300 text-2xl">
+          <div className="flex overflow-hidden rounded-xl border border-slate-300 text-base">
             <button className="h-12 w-12 border-r border-slate-300 text-slate-500">‹</button>
             <button className="h-12 w-12 border-r border-slate-300 bg-[#d5e5eb] font-semibold text-[#0e7a9a]">1</button>
             <button className="h-12 w-12 border-r border-slate-300 text-slate-600">2</button>

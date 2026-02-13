@@ -86,14 +86,14 @@ export default async function AdminExercisesPage() {
   return (
     <div className="space-y-7">
       <header>
-        <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Biblioteca global de ejercicios</h1>
-        <p className="mt-2 text-4xl text-slate-500">Gestiona ejercicios por zona corporal, categoría y dificultad.</p>
+        <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Biblioteca global de ejercicios</h1>
+        <p className="mt-2 text-2xl text-slate-500">Gestiona ejercicios por zona corporal, categoría y dificultad.</p>
       </header>
 
       <div className="grid gap-6 xl:grid-cols-[1.03fr_1fr]">
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="border-b border-slate-200 px-7 py-6">
-            <h2 className="flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+            <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#0d7b97]">●</span>
               Nuevo ejercicio
             </h2>
@@ -105,7 +105,7 @@ export default async function AdminExercisesPage() {
 
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-7 py-6">
-            <h2 className="flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+            <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#0d7b97]">▣</span>
               Biblioteca actual
             </h2>
@@ -117,7 +117,7 @@ export default async function AdminExercisesPage() {
 
           <div className="p-6">
             {visibleExercises.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-10 text-center text-3xl text-slate-500">
+              <div className="rounded-2xl border border-dashed border-slate-300 px-6 py-10 text-center text-xl text-slate-500">
                 Aún no hay ejercicios cargados.
               </div>
             ) : (
@@ -154,8 +154,8 @@ export default async function AdminExercisesPage() {
                       </div>
 
                       <div className="px-4 py-3">
-                        <p className="text-4xl font-semibold tracking-tight text-slate-900">{exercise.name}</p>
-                        <p className="mt-1 text-2xl text-slate-500">
+                        <p className="text-2xl font-semibold tracking-tight text-slate-900">{exercise.name}</p>
+                        <p className="mt-1 text-base text-slate-500">
                           {bodyPartLabelMap.get(bodyPart) ?? "General"} • {exercise.series} Series
                         </p>
                       </div>
@@ -167,12 +167,12 @@ export default async function AdminExercisesPage() {
           </div>
 
           <div className="flex items-center justify-between border-t border-slate-200 px-7 py-5">
-            <p className="text-3xl text-slate-500">
+            <p className="text-xl text-slate-500">
               Mostrando {visibleExercises.length} de {exercises.length}
             </p>
             <div className="flex gap-3">
-              <button className="h-11 w-11 rounded-xl border border-slate-300 text-2xl text-slate-500">‹</button>
-              <button className="h-11 w-11 rounded-xl border border-slate-300 text-2xl text-slate-500">›</button>
+              <button className="h-11 w-11 rounded-xl border border-slate-300 text-base text-slate-500">‹</button>
+              <button className="h-11 w-11 rounded-xl border border-slate-300 text-base text-slate-500">›</button>
             </div>
           </div>
         </Card>

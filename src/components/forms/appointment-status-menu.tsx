@@ -48,7 +48,7 @@ export function AppointmentStatusMenu({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="rounded-md px-2 py-1 text-2xl text-[#5478bd] hover:bg-slate-100"
+        className="rounded-md px-2 py-1 text-base text-[#5478bd] hover:bg-slate-100"
       >
         ⋮
       </button>

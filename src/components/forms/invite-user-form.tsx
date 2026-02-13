@@ -43,28 +43,28 @@ export function InviteUserForm({ clinicId }: { clinicId: string }) {
         name="fullName"
         placeholder="Nombre completo"
         required
-        className="h-14 rounded-xl border-slate-300 px-4 text-2xl"
+        className="h-14 rounded-xl border-slate-300 px-4 text-base"
       />
       <Input
         type="email"
         name="email"
         placeholder="correo@centro.com"
         required
-        className="h-14 rounded-xl border-slate-300 px-4 text-2xl"
+        className="h-14 rounded-xl border-slate-300 px-4 text-base"
       />
-      <Input name="phone" placeholder="Teléfono" required className="h-14 rounded-xl border-slate-300 px-4 text-2xl" />
-      <Select name="role" defaultValue="therapist" className="h-14 rounded-xl border-slate-300 px-4 text-2xl">
+      <Input name="phone" placeholder="Teléfono" required className="h-14 rounded-xl border-slate-300 px-4 text-base" />
+      <Select name="role" defaultValue="therapist" className="h-14 rounded-xl border-slate-300 px-4 text-base">
         <option value="therapist">Fisioterapeuta</option>
         <option value="admin">Admin</option>
         <option value="patient">Paciente</option>
       </Select>
 
-      {message ? <p className="text-2xl text-slate-700">{message}</p> : null}
+      {message ? <p className="text-base text-slate-700">{message}</p> : null}
 
       <Button
         type="submit"
         disabled={loading}
-        className="h-14 rounded-xl bg-[#0e7a9a] px-8 text-2xl font-semibold text-white hover:bg-[#0b6682]"
+        className="h-14 rounded-xl bg-[#0e7a9a] px-8 text-base font-semibold text-white hover:bg-[#0b6682]"
       >
         {loading ? "Enviando..." : "Invitar usuario"}
       </Button>

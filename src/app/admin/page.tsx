@@ -150,49 +150,49 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <header>
-        <h1 className="text-6xl font-semibold tracking-tight text-[#4d74b9] md:text-7xl">Dashboard general</h1>
-        <p className="mt-2 text-4xl text-slate-700">Métricas rápidas por sede y estado general.</p>
+        <h1 className="text-4xl font-semibold tracking-tight text-[#4d74b9] md:text-5xl">Dashboard general</h1>
+        <p className="mt-2 text-2xl text-slate-700">Métricas rápidas por sede y estado general.</p>
       </header>
 
       <section className="mt-10 grid gap-6 md:grid-cols-2">
         <Card className="rounded-3xl border-slate-200 bg-white px-8 py-7 shadow-sm">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-4xl font-medium text-slate-600">Citas del mes</h2>
+              <h2 className="text-2xl font-medium text-slate-600">Citas del mes</h2>
               <div className="mt-4 flex items-end gap-3">
-                <p className="text-8xl font-semibold tracking-tight text-[#6f95d3]">{totalAppointmentsThisMonth}</p>
-                <p className="mb-2 rounded-full bg-[#edf4ea] px-3 py-1 text-2xl text-[#7ea79f]">
+                <p className="text-5xl font-semibold tracking-tight text-[#6f95d3]">{totalAppointmentsThisMonth}</p>
+                <p className="mb-2 rounded-full bg-[#edf4ea] px-3 py-1 text-base text-[#7ea79f]">
                   {trend === null ? "N/A" : `${trend > 0 ? "+" : ""}${trend}% vs mes anterior`}
                 </p>
               </div>
             </div>
-            <div className="rounded-2xl bg-slate-100 px-4 py-3 text-6xl text-slate-300">🗓</div>
+            <div className="rounded-2xl bg-slate-100 px-4 py-3 text-4xl text-slate-300">🗓</div>
           </div>
         </Card>
 
         <Card className="rounded-3xl border-slate-200 bg-white px-8 py-7 shadow-sm">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-4xl font-medium text-slate-600">Pacientes activos</h2>
+              <h2 className="text-2xl font-medium text-slate-600">Pacientes activos</h2>
               <div className="mt-4 flex items-end gap-3">
-                <p className="text-8xl font-semibold tracking-tight text-[#8fbeb6]">{totalActivePatients}</p>
-                <p className="mb-2 rounded-full bg-[#edf2fb] px-3 py-1 text-2xl text-[#6d8fcb]">
+                <p className="text-5xl font-semibold tracking-tight text-[#8fbeb6]">{totalActivePatients}</p>
+                <p className="mb-2 rounded-full bg-[#edf2fb] px-3 py-1 text-base text-[#6d8fcb]">
                   Actualmente en terapia
                 </p>
               </div>
             </div>
-            <div className="rounded-2xl bg-slate-100 px-4 py-3 text-6xl text-slate-300">👥</div>
+            <div className="rounded-2xl bg-slate-100 px-4 py-3 text-4xl text-slate-300">👥</div>
           </div>
         </Card>
       </section>
 
       <section className="mt-7 grid gap-6 xl:grid-cols-[360px_1fr]">
         <Card className="rounded-3xl border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="text-5xl font-semibold tracking-tight text-[#4d74b9]">Métricas por Sede</h3>
+          <h3 className="text-3xl font-semibold tracking-tight text-[#4d74b9]">Métricas por Sede</h3>
 
           <div className="mt-8 flex h-64 items-end justify-center gap-4">
             {chartData.length === 0 ? (
-              <p className="text-2xl text-slate-500">Sin datos de sedes.</p>
+              <p className="text-base text-slate-500">Sin datos de sedes.</p>
             ) : (
               chartData.map((item, index) => {
                 const height = Math.max(Math.round((item.value / maxValue) * 180), 24);
@@ -206,20 +206,20 @@ export default async function AdminDashboardPage() {
                         style={{ height: `${height}px` }}
                       />
                     </div>
-                    <p className="text-2xl font-medium text-slate-600">{item.name}</p>
+                    <p className="text-base font-medium text-slate-600">{item.name}</p>
                   </div>
                 );
               })
             )}
           </div>
 
-          <p className="mt-5 text-center text-2xl text-slate-400">Rendimiento mensual comparativo</p>
+          <p className="mt-5 text-center text-base text-slate-400">Rendimiento mensual comparativo</p>
         </Card>
 
         <Card className="overflow-hidden rounded-3xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
-            <h3 className="text-5xl font-semibold tracking-tight text-[#4d74b9]">Estado de Sedes</h3>
-            <Link href="/admin/clinics" className="text-3xl font-medium text-[#6e93cf] hover:text-[#4d74b9]">
+            <h3 className="text-3xl font-semibold tracking-tight text-[#4d74b9]">Estado de Sedes</h3>
+            <Link href="/admin/clinics" className="text-xl font-medium text-[#6e93cf] hover:text-[#4d74b9]">
               Ver todo
             </Link>
           </div>
@@ -227,7 +227,7 @@ export default async function AdminDashboardPage() {
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
-                <tr className="bg-[#f4f5f8] text-left text-2xl font-semibold text-slate-500">
+                <tr className="bg-[#f4f5f8] text-left text-base font-semibold text-slate-500">
                   <th className="px-6 py-4">SEDE</th>
                   <th className="px-6 py-4">TERAPEUTAS</th>
                   <th className="px-6 py-4">PACIENTES TOTALES</th>
@@ -238,20 +238,20 @@ export default async function AdminDashboardPage() {
               <tbody>
                 {clinicMetrics.length === 0 ? (
                   <tr>
-                    <td className="px-6 py-8 text-2xl text-slate-500" colSpan={5}>
+                    <td className="px-6 py-8 text-base text-slate-500" colSpan={5}>
                       No hay sedes registradas.
                     </td>
                   </tr>
                 ) : (
                   clinicMetrics.map((clinic) => (
-                    <tr key={clinic.clinicId} className="border-t border-slate-200 text-[32px] text-slate-700">
+                    <tr key={clinic.clinicId} className="border-t border-slate-200 text-lg text-slate-700">
                       <td className="px-6 py-4 font-medium">{clinic.clinicName}</td>
                       <td className="px-6 py-4">{clinic.therapists}</td>
                       <td className="px-6 py-4 text-[#4d74b9]">{clinic.patients}</td>
                       <td className="px-6 py-4">{clinic.appointmentsToday}</td>
                       <td className="px-6 py-4">
                         <span
-                          className={`inline-flex items-center gap-2 rounded-full px-4 py-1 text-2xl ${
+                          className={`inline-flex items-center gap-2 rounded-full px-4 py-1 text-base ${
                             clinic.active
                               ? "bg-[#edf4ea] text-[#3b8a60]"
                               : "bg-[#fff6e6] text-[#b18126]"

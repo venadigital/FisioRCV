@@ -59,7 +59,7 @@ export function AdminExerciseForm() {
       className="space-y-5"
     >
       <div>
-        <label className="mb-2 block text-2xl font-medium text-slate-800">Nombre del ejercicio</label>
+        <label className="mb-2 block text-base font-medium text-slate-800">Nombre del ejercicio</label>
         <Input
           name="name"
           placeholder="Ej: Sentadilla isométrica"
@@ -69,7 +69,7 @@ export function AdminExerciseForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-2xl font-medium text-slate-800">Enlace de video</label>
+        <label className="mb-2 block text-base font-medium text-slate-800">Enlace de video</label>
         <Input
           name="youtubeUrl"
           type="url"
@@ -80,7 +80,7 @@ export function AdminExerciseForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-2xl font-medium text-slate-800">Instrucciones</label>
+        <label className="mb-2 block text-base font-medium text-slate-800">Instrucciones</label>
         <Textarea
           name="instructions"
           rows={4}
@@ -129,7 +129,7 @@ export function AdminExerciseForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-2xl font-medium text-slate-800">Categoría</label>
+        <label className="mb-2 block text-base font-medium text-slate-800">Categoría</label>
         <Input
           name="category"
           placeholder="Ej: Fortalecimiento, Estiramiento"
@@ -140,7 +140,7 @@ export function AdminExerciseForm() {
 
       <div className="grid gap-3 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Zona Corporal</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Zona Corporal</label>
           <Select name="bodyPart" defaultValue="lower_back" className="h-12 rounded-xl px-4 text-xl">
             {BODY_PART_OPTIONS.map((part) => (
               <option key={part.value} value={part.value}>
@@ -150,7 +150,7 @@ export function AdminExerciseForm() {
           </Select>
         </div>
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Dificultad</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Dificultad</label>
           <Select name="difficulty" defaultValue="medium" className="h-12 rounded-xl px-4 text-xl">
             <option value="easy">Bajo</option>
             <option value="medium">Medio</option>
@@ -174,7 +174,7 @@ export function AdminExerciseForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="mt-2 h-14 rounded-xl bg-[#0d7b97] px-8 text-2xl font-semibold text-white hover:bg-[#0a647b]"
+        className="mt-2 h-14 rounded-xl bg-[#0d7b97] px-8 text-base font-semibold text-white hover:bg-[#0a647b]"
       >
         {loading ? "Guardando..." : "Guardar ejercicio"}
       </Button>

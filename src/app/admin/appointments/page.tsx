@@ -70,20 +70,20 @@ export default async function AdminAppointmentsPage() {
     <div className="space-y-7">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Agenda Maestra</h1>
-          <p className="mt-2 text-4xl text-slate-500">Crear, editar estado y revisar citas de la sede.</p>
+          <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Agenda Maestra</h1>
+          <p className="mt-2 text-2xl text-slate-500">Crear, editar estado y revisar citas de la sede.</p>
         </div>
 
         <div className="flex items-center gap-3 pt-2">
-          <button className="h-12 rounded-xl border border-slate-300 bg-white px-5 text-2xl text-slate-700">▾ Filtrar</button>
-          <button className="h-12 rounded-xl bg-[#9ec7be] px-6 text-2xl font-semibold text-white">⬇ Exportar</button>
+          <button className="h-12 rounded-xl border border-slate-300 bg-white px-5 text-base text-slate-700">▾ Filtrar</button>
+          <button className="h-12 rounded-xl bg-[#9ec7be] px-6 text-base font-semibold text-white">⬇ Exportar</button>
         </div>
       </header>
 
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#8abeb0]">▍</span>
               Crear cita
             </h2>
@@ -99,7 +99,7 @@ export default async function AdminAppointmentsPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-200 px-8 py-6">
-          <h2 className="flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
             <span className="text-[#8abeb0]">▍</span>
             Citas programadas
           </h2>
@@ -142,7 +142,7 @@ export default async function AdminAppointmentsPage() {
                   return (
                     <tr key={appointment.id} className="border-t border-slate-200 text-xl text-slate-700">
                       <td className="px-4 py-4">
-                        <p className="text-3xl font-semibold text-slate-800">{formatHour(appointment.scheduled_at)}</p>
+                        <p className="text-xl font-semibold text-slate-800">{formatHour(appointment.scheduled_at)}</p>
                         <p className="text-lg text-slate-500">{formatDay(appointment.scheduled_at)}</p>
                       </td>
                       <td className="px-4 py-4">
@@ -151,13 +151,13 @@ export default async function AdminAppointmentsPage() {
                             {initials(patientName)}
                           </div>
                           <div>
-                            <p className="text-3xl font-medium text-slate-900">{patientName}</p>
+                            <p className="text-xl font-medium text-slate-900">{patientName}</p>
                             <p className="text-lg text-slate-500">ID: #{appointment.patient_id.slice(0, 6)}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-4 text-3xl">{therapist?.full_name ?? "-"}</td>
-                      <td className="px-4 py-4 text-3xl">{clinic?.name ?? "-"}</td>
+                      <td className="px-4 py-4 text-xl">{therapist?.full_name ?? "-"}</td>
+                      <td className="px-4 py-4 text-xl">{clinic?.name ?? "-"}</td>
                       <td className="px-4 py-4">
                         <AppointmentStatusMenu
                           appointmentId={appointment.id}
@@ -173,10 +173,10 @@ export default async function AdminAppointmentsPage() {
         </div>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-3xl text-slate-500">
+          <p className="text-xl text-slate-500">
             Mostrando 1 a {Math.min(visibleAppointments.length, 20)} de {appointments.length} resultados
           </p>
-          <div className="flex overflow-hidden rounded-xl border border-slate-300 text-2xl">
+          <div className="flex overflow-hidden rounded-xl border border-slate-300 text-base">
             <button className="h-12 w-12 border-r border-slate-300 text-slate-500">‹</button>
             <button className="h-12 w-12 border-r border-slate-300 bg-[#dbe8fb] font-semibold text-[#4364a2]">1</button>
             <button className="h-12 w-12 border-r border-slate-300 text-slate-600">2</button>

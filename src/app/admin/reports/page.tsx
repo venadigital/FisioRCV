@@ -198,11 +198,11 @@ export default async function AdminReportsPage() {
     <div className="space-y-7">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Reportes básicos</h1>
-          <p className="mt-2 text-4xl text-slate-500">Citas, pacientes activos y adherencia agregada.</p>
+          <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Reportes básicos</h1>
+          <p className="mt-2 text-2xl text-slate-500">Citas, pacientes activos y adherencia agregada.</p>
         </div>
 
-        <div className="flex h-12 items-center overflow-hidden rounded-xl border border-slate-300 bg-white text-2xl">
+        <div className="flex h-12 items-center overflow-hidden rounded-xl border border-slate-300 bg-white text-base">
           <button className="h-full bg-[#f7f8fb] px-6 font-medium text-slate-800">Mes actual</button>
           <button className="h-full border-l border-slate-200 px-6 text-slate-500">Últimos 3 meses</button>
         </div>
@@ -211,37 +211,37 @@ export default async function AdminReportsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-3xl font-semibold uppercase tracking-wide text-slate-500">Citas del mes</h2>
-            <span className="rounded-xl bg-[#e8eefb] px-4 py-3 text-2xl text-[#4b70ba]">▣</span>
+            <h2 className="text-xl font-semibold uppercase tracking-wide text-slate-500">Citas del mes</h2>
+            <span className="rounded-xl bg-[#e8eefb] px-4 py-3 text-base text-[#4b70ba]">▣</span>
           </div>
-          <p className="mt-6 text-8xl font-semibold text-[#4b70ba]">{monthAppointmentsCount}</p>
-          <p className="mt-1 text-3xl text-slate-400">{deltaLabel}</p>
+          <p className="mt-6 text-5xl font-semibold text-[#4b70ba]">{monthAppointmentsCount}</p>
+          <p className="mt-1 text-xl text-slate-400">{deltaLabel}</p>
         </Card>
 
         <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-3xl font-semibold uppercase tracking-wide text-slate-500">Pacientes activos</h2>
-            <span className="rounded-xl bg-[#e7f4f0] px-4 py-3 text-2xl text-[#178f78]">✚</span>
+            <h2 className="text-xl font-semibold uppercase tracking-wide text-slate-500">Pacientes activos</h2>
+            <span className="rounded-xl bg-[#e7f4f0] px-4 py-3 text-base text-[#178f78]">✚</span>
           </div>
-          <p className="mt-6 text-8xl font-semibold text-[#178f78]">{activePatients}</p>
-          <p className="mt-1 text-3xl text-slate-400">{activePatientsHint}</p>
+          <p className="mt-6 text-5xl font-semibold text-[#178f78]">{activePatients}</p>
+          <p className="mt-1 text-xl text-slate-400">{activePatientsHint}</p>
         </Card>
 
         <Card className="rounded-2xl border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-3xl font-semibold uppercase tracking-wide text-slate-500">Completaciones ejercicio</h2>
-            <span className="rounded-xl bg-[#ececfd] px-4 py-3 text-2xl text-[#5954de]">◉</span>
+            <h2 className="text-xl font-semibold uppercase tracking-wide text-slate-500">Completaciones ejercicio</h2>
+            <span className="rounded-xl bg-[#ececfd] px-4 py-3 text-base text-[#5954de]">◉</span>
           </div>
-          <p className="mt-6 text-8xl font-semibold text-[#0f172a]">{completionCount}</p>
-          <p className="mt-1 text-3xl text-slate-400">Total acumulado</p>
+          <p className="mt-6 text-5xl font-semibold text-[#0f172a]">{completionCount}</p>
+          <p className="mt-1 text-xl text-slate-400">Total acumulado</p>
         </Card>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1fr_340px]">
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-200 px-7 py-6">
-            <h2 className="text-6xl font-semibold tracking-tight text-slate-900">Tendencia de Citas</h2>
-            <button className="text-3xl font-medium text-[#3d65b5]">Ver detalle</button>
+            <h2 className="text-4xl font-semibold tracking-tight text-slate-900">Tendencia de Citas</h2>
+            <button className="text-xl font-medium text-[#3d65b5]">Ver detalle</button>
           </div>
           <div className="px-6 py-3">
             <AdminAppointmentsTrendChart data={trendData} />
@@ -250,13 +250,13 @@ export default async function AdminReportsPage() {
 
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-200 px-6 py-6">
-            <h2 className="text-5xl font-semibold tracking-tight text-slate-900">Distribución por Estado</h2>
-            <span className="text-3xl text-slate-400">•••</span>
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Distribución por Estado</h2>
+            <span className="text-xl text-slate-400">•••</span>
           </div>
           <div className="px-4">
             <AdminStatusDistributionChart data={statusData} />
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 pb-6 text-2xl text-slate-600">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 pb-6 text-base text-slate-600">
             {statusData.map((slice) => (
               <div key={slice.label} className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full" style={{ backgroundColor: slice.color }} />
@@ -269,13 +269,13 @@ export default async function AdminReportsPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="border-b border-slate-200 px-7 py-6">
-          <h2 className="text-6xl font-semibold tracking-tight text-slate-900">Actividad Reciente</h2>
+          <h2 className="text-4xl font-semibold tracking-tight text-slate-900">Actividad Reciente</h2>
         </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="bg-[#f7f8fb] text-left text-2xl font-semibold text-slate-500">
+              <tr className="bg-[#f7f8fb] text-left text-base font-semibold text-slate-500">
                 <th className="px-7 py-4">PACIENTE</th>
                 <th className="px-7 py-4">TIPO</th>
                 <th className="px-7 py-4">FECHA</th>
@@ -285,7 +285,7 @@ export default async function AdminReportsPage() {
             <tbody>
               {recentAppointments.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-7 py-10 text-center text-3xl text-slate-500">
+                  <td colSpan={4} className="px-7 py-10 text-center text-xl text-slate-500">
                     No hay actividad reciente.
                   </td>
                 </tr>
@@ -297,13 +297,13 @@ export default async function AdminReportsPage() {
                   const patientName = patientEntry?.full_name ?? "Paciente";
 
                   return (
-                    <tr key={appointment.id} className="border-t border-slate-200 text-3xl text-slate-700">
+                    <tr key={appointment.id} className="border-t border-slate-200 text-xl text-slate-700">
                       <td className="px-7 py-5 font-medium text-slate-900">{patientName}</td>
                       <td className="px-7 py-5 text-slate-600">{appointmentType(appointment.status)}</td>
                       <td className="px-7 py-5 text-slate-500">{formatRelativeDateTime(appointment.scheduled_at)}</td>
                       <td className="px-7 py-5 text-right">
                         <span
-                          className={`inline-flex rounded-full px-4 py-1 text-2xl font-medium ${statusTone(
+                          className={`inline-flex rounded-full px-4 py-1 text-base font-medium ${statusTone(
                             appointment.status,
                           )}`}
                         >

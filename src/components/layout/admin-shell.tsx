@@ -21,7 +21,7 @@ export function AdminShell({
         <aside className="flex h-full flex-col border-r border-slate-200 bg-white">
           <div>
             <div className="border-b border-slate-200 px-8 py-6">
-              <h1 className="text-5xl font-semibold tracking-tight text-[#0e7a9a]">Fisio RCV</h1>
+              <h1 className="text-3xl font-semibold tracking-tight text-[#0e7a9a]">Fisio RCV</h1>
             </div>
           </div>
 
@@ -34,13 +34,13 @@ export function AdminShell({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-4 py-3 text-3xl transition",
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-xl transition",
                     active
                       ? "bg-[#d5e5eb] font-semibold text-[#0e7a9a]"
                       : "text-slate-700 hover:bg-slate-100",
                   )}
                 >
-                  <span className={cn("text-2xl", active ? "text-[#0e7a9a]" : "text-slate-400")}>
+                  <span className={cn("text-base", active ? "text-[#0e7a9a]" : "text-slate-400")}>
                     {item.icon ?? "•"}
                   </span>
                   <span>{item.label}</span>
@@ -50,7 +50,7 @@ export function AdminShell({
           </nav>
 
           <div className="mt-auto px-6 pb-8">
-            <LogoutButton className="h-14 w-full rounded-xl border border-[#87a9e2] text-[30px] font-medium text-[#4d74b9]" />
+            <LogoutButton className="h-14 w-full rounded-xl border border-[#87a9e2] text-lg font-medium text-[#4d74b9]" />
           </div>
         </aside>
 

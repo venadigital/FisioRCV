@@ -54,14 +54,14 @@ export default async function AdminInvitationCodesPage() {
   return (
     <div className="space-y-7">
       <header>
-        <h1 className="text-7xl font-semibold tracking-tight text-[#111827]">Códigos de invitación</h1>
-        <p className="mt-2 text-4xl text-slate-500">Generación, control de uso y expiración.</p>
+        <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Códigos de invitación</h1>
+        <p className="mt-2 text-2xl text-slate-500">Generación, control de uso y expiración.</p>
       </header>
 
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#0d7b97]">⊕</span>
               Generar código
             </h2>
@@ -72,7 +72,7 @@ export default async function AdminInvitationCodesPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-200 px-8 py-6">
-          <h2 className="flex items-center gap-3 text-5xl font-semibold tracking-tight text-slate-800">
+          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
             <span className="text-[#0d7b97]">◔</span>
             Histórico de códigos
           </h2>
@@ -141,10 +141,10 @@ export default async function AdminInvitationCodesPage() {
         </div>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-3xl text-slate-500">
+          <p className="text-xl text-slate-500">
             Mostrando 1 a {Math.min(visibleCodes.length, 12)} de {codes.length} resultados
           </p>
-          <div className="flex items-center gap-3 text-2xl">
+          <div className="flex items-center gap-3 text-base">
             <button className="rounded-xl border border-slate-300 px-5 py-2 text-slate-600">Anterior</button>
             <button className="rounded-xl border border-slate-300 px-5 py-2 text-slate-600">Siguiente</button>
           </div>

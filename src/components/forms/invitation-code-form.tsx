@@ -44,7 +44,7 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
     >
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Límite de usos</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Límite de usos</label>
           <Input
             name="maxUses"
             type="number"
@@ -58,7 +58,7 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
           </p>
         </div>
         <div>
-          <label className="mb-2 block text-2xl font-medium text-slate-800">Expira el (opcional)</label>
+          <label className="mb-2 block text-base font-medium text-slate-800">Expira el (opcional)</label>
           <Input name="expiresAt" type="datetime-local" className="h-12 rounded-xl border-slate-300 px-4 text-xl" />
           <p className="mt-2 text-lg text-slate-400">Deje en blanco para que el código no expire nunca.</p>
         </div>
@@ -69,7 +69,7 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
       <Button
         type="submit"
         disabled={loading}
-        className="h-12 rounded-xl bg-[#0d7b97] px-8 text-2xl font-semibold text-white hover:bg-[#0a647b]"
+        className="h-12 rounded-xl bg-[#0d7b97] px-8 text-base font-semibold text-white hover:bg-[#0a647b]"
       >
         {loading ? "Generando..." : "Generar código"}
       </Button>
