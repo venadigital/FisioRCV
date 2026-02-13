@@ -64,7 +64,7 @@ export function AdminExerciseForm() {
           name="name"
           placeholder="Ej: Sentadilla isométrica"
           required
-          className="h-12 rounded-xl border-slate-300 px-4 text-xl text-slate-700"
+          className="h-12 rounded-xl border-slate-300 px-4 text-lg text-slate-700"
         />
       </div>
 
@@ -75,7 +75,7 @@ export function AdminExerciseForm() {
           type="url"
           placeholder="https://youtube.com/..."
           required
-          className="h-12 rounded-xl border-slate-300 px-4 text-xl text-slate-700"
+          className="h-12 rounded-xl border-slate-300 px-4 text-lg text-slate-700"
         />
       </div>
 
@@ -86,24 +86,24 @@ export function AdminExerciseForm() {
           rows={4}
           placeholder="Describe paso a paso cómo realizar el ejercicio..."
           required
-          className="rounded-xl border-slate-300 px-4 py-3 text-xl text-slate-700"
+          className="rounded-xl border-slate-300 px-4 py-3 text-lg text-slate-700"
         />
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">
         <div>
-          <label className="mb-1 block text-xl font-semibold uppercase tracking-wide text-slate-500">Series</label>
+          <label className="mb-1 block text-lg font-semibold uppercase tracking-wide text-slate-500">Series</label>
           <Input
             name="series"
             type="number"
             min={1}
             defaultValue={3}
             required
-            className="h-11 rounded-xl px-3 text-xl text-slate-700"
+            className="h-11 rounded-xl px-3 text-lg text-slate-700"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xl font-semibold uppercase tracking-wide text-slate-500">
+          <label className="mb-1 block text-lg font-semibold uppercase tracking-wide text-slate-500">
             Repeticiones
           </label>
           <Input
@@ -112,18 +112,18 @@ export function AdminExerciseForm() {
             min={1}
             defaultValue={12}
             required
-            className="h-11 rounded-xl px-3 text-xl text-slate-700"
+            className="h-11 rounded-xl px-3 text-lg text-slate-700"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xl font-semibold uppercase tracking-wide text-slate-500">Frecuencia</label>
+          <label className="mb-1 block text-lg font-semibold uppercase tracking-wide text-slate-500">Frecuencia</label>
           <Input
             name="frequencyPerWeek"
             type="number"
             min={1}
             defaultValue={4}
             required
-            className="h-11 rounded-xl px-3 text-xl text-slate-700"
+            className="h-11 rounded-xl px-3 text-lg text-slate-700"
           />
         </div>
       </div>
@@ -134,14 +134,14 @@ export function AdminExerciseForm() {
           name="category"
           placeholder="Ej: Fortalecimiento, Estiramiento"
           required
-          className="h-12 rounded-xl border-slate-300 px-4 text-xl text-slate-700"
+          className="h-12 rounded-xl border-slate-300 px-4 text-lg text-slate-700"
         />
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Zona Corporal</label>
-          <Select name="bodyPart" defaultValue="lower_back" className="h-12 rounded-xl px-4 text-xl">
+          <Select name="bodyPart" defaultValue="lower_back" className="h-12 rounded-xl px-4 text-lg">
             {BODY_PART_OPTIONS.map((part) => (
               <option key={part.value} value={part.value}>
                 {part.label}
@@ -151,7 +151,7 @@ export function AdminExerciseForm() {
         </div>
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Dificultad</label>
-          <Select name="difficulty" defaultValue="medium" className="h-12 rounded-xl px-4 text-xl">
+          <Select name="difficulty" defaultValue="medium" className="h-12 rounded-xl px-4 text-lg">
             <option value="easy">Bajo</option>
             <option value="medium">Medio</option>
             <option value="hard">Alto</option>
@@ -163,8 +163,8 @@ export function AdminExerciseForm() {
         <p
           className={
             isError
-              ? "rounded-xl bg-[#fff1f1] px-4 py-3 text-xl text-[#b84747]"
-              : "rounded-xl bg-[#e8f4ef] px-4 py-3 text-xl text-[#2a885b]"
+              ? "rounded-xl bg-[#fff1f1] px-4 py-3 text-lg text-[#b84747]"
+              : "rounded-xl bg-[#e8f4ef] px-4 py-3 text-lg text-[#2a885b]"
           }
         >
           {message}

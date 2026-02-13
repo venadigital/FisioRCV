@@ -70,8 +70,8 @@ export default async function AdminAppointmentsPage() {
     <div className="space-y-7">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Agenda Maestra</h1>
-          <p className="mt-2 text-2xl text-slate-500">Crear, editar estado y revisar citas de la sede.</p>
+          <h1 className="text-4xl font-semibold tracking-tight text-[#111827]">Agenda Maestra</h1>
+          <p className="mt-2 text-xl text-slate-500">Crear, editar estado y revisar citas de la sede.</p>
         </div>
 
         <div className="flex items-center gap-3 pt-2">
@@ -83,7 +83,7 @@ export default async function AdminAppointmentsPage() {
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#8abeb0]">▍</span>
               Crear cita
             </h2>
@@ -99,20 +99,20 @@ export default async function AdminAppointmentsPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-200 px-8 py-6">
-          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
+          <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-slate-800">
             <span className="text-[#8abeb0]">▍</span>
             Citas programadas
           </h2>
           <input
             placeholder="Buscar por nombre o ID..."
-            className="h-12 w-80 rounded-xl border border-slate-300 px-4 text-xl text-slate-700 outline-none focus:ring-2 focus:ring-[#5478bd]"
+            className="h-12 w-80 rounded-xl border border-slate-300 px-4 text-lg text-slate-700 outline-none focus:ring-2 focus:ring-[#5478bd]"
           />
         </div>
 
         <div className="overflow-x-auto px-8 py-5">
           <table className="min-w-full">
             <thead>
-              <tr className="text-left text-xl font-semibold text-slate-500">
+              <tr className="text-left text-lg font-semibold text-slate-500">
                 <th className="px-4 py-3">HORA</th>
                 <th className="px-4 py-3">PACIENTE</th>
                 <th className="px-4 py-3">TERAPEUTA</th>
@@ -123,7 +123,7 @@ export default async function AdminAppointmentsPage() {
             <tbody>
               {visibleAppointments.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-xl text-slate-500">
+                  <td colSpan={5} className="px-4 py-8 text-center text-lg text-slate-500">
                     No hay citas programadas.
                   </td>
                 </tr>
@@ -140,9 +140,9 @@ export default async function AdminAppointmentsPage() {
                   const patientName = patient?.full_name ?? "Paciente";
 
                   return (
-                    <tr key={appointment.id} className="border-t border-slate-200 text-xl text-slate-700">
+                    <tr key={appointment.id} className="border-t border-slate-200 text-lg text-slate-700">
                       <td className="px-4 py-4">
-                        <p className="text-xl font-semibold text-slate-800">{formatHour(appointment.scheduled_at)}</p>
+                        <p className="text-lg font-semibold text-slate-800">{formatHour(appointment.scheduled_at)}</p>
                         <p className="text-lg text-slate-500">{formatDay(appointment.scheduled_at)}</p>
                       </td>
                       <td className="px-4 py-4">
@@ -151,13 +151,13 @@ export default async function AdminAppointmentsPage() {
                             {initials(patientName)}
                           </div>
                           <div>
-                            <p className="text-xl font-medium text-slate-900">{patientName}</p>
+                            <p className="text-lg font-medium text-slate-900">{patientName}</p>
                             <p className="text-lg text-slate-500">ID: #{appointment.patient_id.slice(0, 6)}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-4 text-xl">{therapist?.full_name ?? "-"}</td>
-                      <td className="px-4 py-4 text-xl">{clinic?.name ?? "-"}</td>
+                      <td className="px-4 py-4 text-lg">{therapist?.full_name ?? "-"}</td>
+                      <td className="px-4 py-4 text-lg">{clinic?.name ?? "-"}</td>
                       <td className="px-4 py-4">
                         <AppointmentStatusMenu
                           appointmentId={appointment.id}
@@ -173,7 +173,7 @@ export default async function AdminAppointmentsPage() {
         </div>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-xl text-slate-500">
+          <p className="text-lg text-slate-500">
             Mostrando 1 a {Math.min(visibleAppointments.length, 20)} de {appointments.length} resultados
           </p>
           <div className="flex overflow-hidden rounded-xl border border-slate-300 text-base">

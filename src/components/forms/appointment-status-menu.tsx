@@ -41,7 +41,7 @@ export function AppointmentStatusMenu({
 
   return (
     <div className="relative inline-flex items-center gap-3">
-      <span className={`rounded-full px-3 py-1 text-xl font-semibold ${STATUS_META[status].classes}`}>
+      <span className={`rounded-full px-3 py-1 text-lg font-semibold ${STATUS_META[status].classes}`}>
         {STATUS_META[status].label}
       </span>
 

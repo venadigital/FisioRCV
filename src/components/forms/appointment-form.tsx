@@ -57,7 +57,7 @@ export function AppointmentForm({
       <div className="grid gap-4 md:grid-cols-[220px_1fr]">
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Sede</label>
-          <Select name="clinicId" defaultValue={defaultClinicId} required className="h-12 rounded-xl px-4 text-xl">
+          <Select name="clinicId" defaultValue={defaultClinicId} required className="h-12 rounded-xl px-4 text-lg">
             {clinics.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.label}
@@ -68,7 +68,7 @@ export function AppointmentForm({
 
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Paciente</label>
-          <Select name="patientId" required className="h-12 rounded-xl px-4 text-xl">
+          <Select name="patientId" required className="h-12 rounded-xl px-4 text-lg">
             <option value="">Buscar paciente...</option>
             {patients.map((item) => (
               <option key={item.id} value={item.id}>
@@ -82,7 +82,7 @@ export function AppointmentForm({
       <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Terapeuta</label>
-          <Select name="therapistId" required className="h-12 rounded-xl px-4 text-xl">
+          <Select name="therapistId" required className="h-12 rounded-xl px-4 text-lg">
             <option value="">Seleccionar terapeuta</option>
             {therapists.map((item) => (
               <option key={item.id} value={item.id}>
@@ -94,7 +94,7 @@ export function AppointmentForm({
 
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Fecha y hora</label>
-          <Input name="scheduledAt" type="datetime-local" required className="h-12 rounded-xl px-4 text-xl" />
+          <Input name="scheduledAt" type="datetime-local" required className="h-12 rounded-xl px-4 text-lg" />
         </div>
       </div>
 

@@ -54,14 +54,14 @@ export default async function AdminInvitationCodesPage() {
   return (
     <div className="space-y-7">
       <header>
-        <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Códigos de invitación</h1>
-        <p className="mt-2 text-2xl text-slate-500">Generación, control de uso y expiración.</p>
+        <h1 className="text-4xl font-semibold tracking-tight text-[#111827]">Códigos de invitación</h1>
+        <p className="mt-2 text-xl text-slate-500">Generación, control de uso y expiración.</p>
       </header>
 
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-semibold tracking-tight text-slate-800">
               <span className="text-[#0d7b97]">⊕</span>
               Generar código
             </h2>
@@ -72,20 +72,20 @@ export default async function AdminInvitationCodesPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-200 px-8 py-6">
-          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-slate-800">
+          <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-slate-800">
             <span className="text-[#0d7b97]">◔</span>
             Histórico de códigos
           </h2>
           <input
             placeholder="Buscar código..."
-            className="h-12 w-80 rounded-xl border border-slate-300 px-4 text-xl text-slate-700 outline-none focus:ring-2 focus:ring-[#0d7b97]"
+            className="h-12 w-80 rounded-xl border border-slate-300 px-4 text-lg text-slate-700 outline-none focus:ring-2 focus:ring-[#0d7b97]"
           />
         </div>
 
         <div className="overflow-x-auto px-8 py-5">
           <table className="min-w-full overflow-hidden rounded-xl border border-slate-200">
             <thead>
-              <tr className="bg-[#f4f6f8] text-left text-xl font-semibold text-slate-500">
+              <tr className="bg-[#f4f6f8] text-left text-lg font-semibold text-slate-500">
                 <th className="px-5 py-4">CÓDIGO</th>
                 <th className="px-5 py-4">CREADO</th>
                 <th className="px-5 py-4">USO</th>
@@ -97,7 +97,7 @@ export default async function AdminInvitationCodesPage() {
             <tbody>
               {visibleCodes.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-8 text-center text-xl text-slate-500">
+                  <td colSpan={6} className="px-5 py-8 text-center text-lg text-slate-500">
                     No hay códigos registrados.
                   </td>
                 </tr>
@@ -108,7 +108,7 @@ export default async function AdminInvitationCodesPage() {
                   const ratio = code.max_uses > 0 ? Math.min((code.used_count / code.max_uses) * 100, 100) : 0;
 
                   return (
-                    <tr key={code.id} className="border-t border-slate-200 text-xl text-slate-700">
+                    <tr key={code.id} className="border-t border-slate-200 text-lg text-slate-700">
                       <td className="px-5 py-4">
                         <span className="inline-flex items-center rounded-full bg-[#e5f2f6] px-3 py-1 font-semibold text-[#0d7b97]">
                           {code.code}
@@ -141,7 +141,7 @@ export default async function AdminInvitationCodesPage() {
         </div>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-xl text-slate-500">
+          <p className="text-lg text-slate-500">
             Mostrando 1 a {Math.min(visibleCodes.length, 12)} de {codes.length} resultados
           </p>
           <div className="flex items-center gap-3 text-base">

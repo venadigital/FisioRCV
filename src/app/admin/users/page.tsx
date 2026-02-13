@@ -7,29 +7,29 @@ type RoleLabel = "admin" | "therapist" | "patient" | "sin rol";
 
 function roleTag(role: RoleLabel) {
   if (role === "admin") {
-    return <span className="rounded-full bg-slate-200 px-3 py-1 text-xl font-medium text-slate-700">admin</span>;
+    return <span className="rounded-full bg-slate-200 px-3 py-1 text-lg font-medium text-slate-700">admin</span>;
   }
 
   if (role === "therapist") {
     return (
-      <span className="rounded-full bg-[#dbe9ff] px-3 py-1 text-xl font-medium text-[#2f5cae]">fisioterapeuta</span>
+      <span className="rounded-full bg-[#dbe9ff] px-3 py-1 text-lg font-medium text-[#2f5cae]">fisioterapeuta</span>
     );
   }
 
   if (role === "patient") {
-    return <span className="rounded-full bg-[#e8f5ff] px-3 py-1 text-xl font-medium text-[#1d7395]">paciente</span>;
+    return <span className="rounded-full bg-[#e8f5ff] px-3 py-1 text-lg font-medium text-[#1d7395]">paciente</span>;
   }
 
-  return <span className="rounded-full bg-slate-100 px-3 py-1 text-xl font-medium text-slate-500">sin rol</span>;
+  return <span className="rounded-full bg-slate-100 px-3 py-1 text-lg font-medium text-slate-500">sin rol</span>;
 }
 
 function stateTag(active: boolean) {
   if (active) {
-    return <span className="rounded-full bg-[#dff4e5] px-3 py-1 text-xl font-medium text-[#2a885b]">activo</span>;
+    return <span className="rounded-full bg-[#dff4e5] px-3 py-1 text-lg font-medium text-[#2a885b]">activo</span>;
   }
 
   return (
-    <span className="rounded-full bg-[#fff3d7] px-3 py-1 text-xl font-medium text-[#9a7320]">pendiente</span>
+    <span className="rounded-full bg-[#fff3d7] px-3 py-1 text-lg font-medium text-[#9a7320]">pendiente</span>
   );
 }
 
@@ -56,14 +56,14 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-7">
       <header>
-        <h1 className="text-5xl font-semibold tracking-tight text-[#111827]">Gestión de usuarios</h1>
-        <p className="mt-2 text-2xl text-slate-500">Crear usuarios y revisar estado de cuenta.</p>
+        <h1 className="text-4xl font-semibold tracking-tight text-[#111827]">Gestión de usuarios</h1>
+        <p className="mt-2 text-xl text-slate-500">Crear usuarios y revisar estado de cuenta.</p>
       </header>
 
       {context.clinicId ? (
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
-            <h2 className="mb-6 text-3xl font-semibold tracking-tight text-slate-800">Invitar usuario</h2>
+            <h2 className="mb-6 text-2xl font-semibold tracking-tight text-slate-800">Invitar usuario</h2>
             <InviteUserForm clinicId={context.clinicId} />
           </div>
         </Card>
@@ -71,7 +71,7 @@ export default async function AdminUsersPage() {
 
       <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
         <div className="border-b border-slate-200 px-8 py-6">
-          <h2 className="text-3xl font-semibold tracking-tight text-slate-800">Usuarios de la sede</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Usuarios de la sede</h2>
         </div>
 
         <ul>
@@ -87,8 +87,8 @@ export default async function AdminUsersPage() {
                   className="flex items-center justify-between gap-4 border-b border-slate-200 px-8 py-6 last:border-b-0"
                 >
                   <div>
-                    <p className="text-2xl font-medium text-slate-900">{profile.full_name}</p>
-                    <p className="mt-1 text-xl text-slate-500">{profile.phone}</p>
+                    <p className="text-xl font-medium text-slate-900">{profile.full_name}</p>
+                    <p className="mt-1 text-lg text-slate-500">{profile.phone}</p>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ export default async function AdminUsersPage() {
         </ul>
 
         <div className="flex items-center justify-between border-t border-slate-200 px-8 py-4">
-          <p className="text-xl text-slate-500">
+          <p className="text-lg text-slate-500">
             Mostrando 1 a {Math.min(visibleRows.length, 12)} de {profiles.length} resultados
           </p>
 

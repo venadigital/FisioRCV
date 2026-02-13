@@ -51,7 +51,7 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
             min={1}
             defaultValue={50}
             required
-            className="h-12 rounded-xl border-slate-300 px-4 text-xl"
+            className="h-12 rounded-xl border-slate-300 px-4 text-lg"
           />
           <p className="mt-2 text-lg text-slate-400">
             Cantidad máxima de veces que este código puede ser canjeado.
@@ -59,7 +59,7 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
         </div>
         <div>
           <label className="mb-2 block text-base font-medium text-slate-800">Expira el (opcional)</label>
-          <Input name="expiresAt" type="datetime-local" className="h-12 rounded-xl border-slate-300 px-4 text-xl" />
+          <Input name="expiresAt" type="datetime-local" className="h-12 rounded-xl border-slate-300 px-4 text-lg" />
           <p className="mt-2 text-lg text-slate-400">Deje en blanco para que el código no expire nunca.</p>
         </div>
       </div>

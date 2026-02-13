@@ -21,7 +21,7 @@ export function AdminShell({
         <aside className="flex h-full flex-col border-r border-slate-200 bg-white">
           <div>
             <div className="border-b border-slate-200 px-8 py-6">
-              <h1 className="text-3xl font-semibold tracking-tight text-[#0e7a9a]">Fisio RCV</h1>
+              <h1 className="text-2xl font-semibold tracking-tight text-[#0e7a9a]">Fisio RCV</h1>
             </div>
           </div>
 
@@ -34,7 +34,7 @@ export function AdminShell({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-4 py-3 text-xl transition",
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-lg transition",
                     active
                       ? "bg-[#d5e5eb] font-semibold text-[#0e7a9a]"
                       : "text-slate-700 hover:bg-slate-100",
