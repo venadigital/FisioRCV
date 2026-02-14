@@ -7,12 +7,33 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 
-export function AdminCreateUserForm({ clinicId }: { clinicId: string }) {
+type ClinicOption = {
+  id: string;
+  name: string;
+  active: boolean;
+};
+
+type AdminCreateUserFormProps = {
+  clinicId: string;
+  clinics: ClinicOption[];
+};
+
+export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState<"therapist" | "admin" | "patient">("therapist");
+  const [selectedPatientClinicIds, setSelectedPatientClinicIds] = useState<string[]>([clinicId]);
+
+  function togglePatientClinic(clinicOptionId: string) {
+    setSelectedPatientClinicIds((previous) =>
+      previous.includes(clinicOptionId)
+        ? previous.filter((value) => value !== clinicOptionId)
+        : [...previous, clinicOptionId],
+    );
+  }
 
   async function onSubmit(formData: FormData) {
     setLoading(true);
@@ -29,13 +50,21 @@ export function AdminCreateUserForm({ clinicId }: { clinicId: string }) {
       return;
     }
 
+    if (role === "patient" && selectedPatientClinicIds.length === 0) {
+      setIsError(true);
+      setMessage("Selecciona al menos una sede para el paciente");
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       email: formData.get("email"),
       password,
-      role: formData.get("role"),
+      role,
       fullName: formData.get("fullName"),
       phone: formData.get("phone"),
       clinicId,
+      clinicIds: role === "patient" ? selectedPatientClinicIds : undefined,
     };
 
     try {
@@ -50,6 +79,8 @@ export function AdminCreateUserForm({ clinicId }: { clinicId: string }) {
       if (response.ok) {
         setMessage("Usuario creado correctamente");
         formRef.current?.reset();
+        setRole("therapist");
+        setSelectedPatientClinicIds([clinicId]);
         router.refresh();
       } else {
         setIsError(true);
@@ -110,11 +141,43 @@ export function AdminCreateUserForm({ clinicId }: { clinicId: string }) {
         />
       </div>
 
-      <Select name="role" defaultValue="therapist" className="h-12 rounded-xl border-slate-300 px-4 text-base">
+      <Select
+        name="role"
+        value={role}
+        onChange={(event) => setRole(event.target.value as "therapist" | "admin" | "patient")}
+        className="h-12 rounded-xl border-slate-300 px-4 text-base"
+      >
         <option value="therapist">Fisioterapeuta</option>
         <option value="admin">Admin</option>
         <option value="patient">Paciente</option>
       </Select>
+
+      {role === "patient" ? (
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-semibold text-slate-800">Sedes asignadas al paciente</p>
+          <p className="mt-1 text-sm text-slate-500">Puedes asignarlo a una o varias sedes.</p>
+
+          <div className="mt-3 grid gap-2 md:grid-cols-2">
+            {clinics.map((clinicOption) => (
+              <label
+                key={clinicOption.id}
+                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedPatientClinicIds.includes(clinicOption.id)}
+                  onChange={() => togglePatientClinic(clinicOption.id)}
+                  className="h-4 w-4 accent-[#0e7a9a]"
+                />
+                <span className="text-sm text-slate-700">
+                  {clinicOption.name}
+                  {!clinicOption.active ? " (inactiva)" : ""}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {message ? (
         <p

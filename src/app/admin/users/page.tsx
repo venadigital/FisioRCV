@@ -4,6 +4,7 @@ import { AdminUserStatusToggle } from "@/components/forms/admin-user-status-togg
 import { Card } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/auth/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 type RoleLabel = "admin" | "therapist" | "patient" | "sin rol";
 type AssignmentRow = { patient_id: string; therapist_id: string; is_primary: boolean; active: boolean };
@@ -43,8 +44,9 @@ function stateTag(active: boolean) {
 export default async function AdminUsersPage() {
   const context = await requireRole("admin");
   const supabase = await createClient();
+  const admin = createAdminClient();
 
-  const [profilesResult, rolesResult] = await Promise.all([
+  const [profilesResult, rolesResult, clinicsResult] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, full_name, phone, active")
@@ -52,6 +54,7 @@ export default async function AdminUsersPage() {
       .order("created_at", { ascending: false })
       .limit(80),
     supabase.from("user_roles").select("user_id, role"),
+    admin.from("clinics").select("id, name, active").eq("active", true).order("name", { ascending: true }),
   ]);
 
   let activeAssignments: AssignmentRow[] = [];
@@ -81,6 +84,8 @@ export default async function AdminUsersPage() {
 
   const profiles = profilesResult.data ?? [];
   const roles = rolesResult.data ?? [];
+  const clinics =
+    clinicsResult.data?.map((clinic) => ({ id: clinic.id, name: clinic.name, active: clinic.active })) ?? [];
 
   const roleMap = new Map(roles.map((item) => [item.user_id, item.role]));
   const visibleRows = profiles.slice(0, 20);
@@ -117,7 +122,7 @@ export default async function AdminUsersPage() {
         <Card className="rounded-2xl border-slate-200 bg-white p-0 shadow-sm">
           <div className="p-8">
             <h2 className="mb-6 text-2xl font-semibold tracking-tight text-slate-800">Crear usuario</h2>
-            <AdminCreateUserForm clinicId={context.clinicId} />
+            <AdminCreateUserForm clinicId={context.clinicId} clinics={clinics} />
           </div>
         </Card>
       ) : null}

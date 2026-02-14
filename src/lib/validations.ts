@@ -33,7 +33,37 @@ export const adminCreateUserSchema = z.object({
   role: z.enum(["admin", "therapist", "patient"]),
   fullName: z.string().min(3, "Nombre requerido"),
   phone: z.string().min(8, "Teléfono inválido"),
-  clinicId: z.string().uuid(),
+  clinicId: z.string().uuid().optional(),
+  clinicIds: z.array(z.string().uuid()).optional(),
+}).superRefine((value, ctx) => {
+  if (value.role === "patient") {
+    const clinicIds = value.clinicIds ?? [];
+    if (clinicIds.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["clinicIds"],
+        message: "Debes asignar al menos una sede al paciente",
+      });
+      return;
+    }
+
+    if (new Set(clinicIds).size !== clinicIds.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["clinicIds"],
+        message: "Hay sedes repetidas en la selección",
+      });
+    }
+    return;
+  }
+
+  if (!value.clinicId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["clinicId"],
+      message: "Debes seleccionar una sede",
+    });
+  }
 });
 
 export const adminUpdateUserStatusSchema = z.object({
