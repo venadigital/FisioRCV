@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getApiUserContext } from "@/lib/auth/api";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { adminUpdateUserStatusSchema } from "@/lib/validations";
 
 const idSchema = z.string().uuid("ID de usuario inválido");
@@ -45,9 +45,9 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
       return errorResponse("No puedes desactivar tu propio usuario", 400, "SELF_DEACTIVATION_BLOCKED");
     }
 
-    const admin = createAdminClient();
+    const supabase = await createClient();
 
-    const { data: targetProfile, error: targetProfileError } = await admin
+    const { data: targetProfile, error: targetProfileError } = await supabase
       .from("profiles")
       .select("id, clinic_id, active")
       .eq("id", userId)
@@ -65,7 +65,7 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
       return errorResponse("No puedes operar usuarios de otra sede", 403, "CLINIC_FORBIDDEN");
     }
 
-    const { data: roleData, error: roleError } = await admin
+    const { data: roleData, error: roleError } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
@@ -80,7 +80,7 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
     }
 
     if (!nextActive && roleData.role === "therapist") {
-      const { data: activePrimaryAssignments, error: assignmentsError } = await admin
+      const { data: activePrimaryAssignments, error: assignmentsError } = await supabase
         .from("patient_assignments")
         .select("id")
         .eq("clinic_id", targetProfile.clinic_id)
@@ -92,7 +92,7 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
       let hasBlockingAssignments = (activePrimaryAssignments ?? []).length > 0;
 
       if (assignmentsError && isMissingIsPrimaryColumn(assignmentsError)) {
-        const { data: legacyAssignments, error: legacyAssignmentsError } = await admin
+        const { data: legacyAssignments, error: legacyAssignmentsError } = await supabase
           .from("patient_assignments")
           .select("id")
           .eq("clinic_id", targetProfile.clinic_id)
@@ -118,7 +118,7 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
       }
     }
 
-    const { error: updateError } = await admin.from("profiles").update({ active: nextActive }).eq("id", userId);
+    const { error: updateError } = await supabase.from("profiles").update({ active: nextActive }).eq("id", userId);
 
     if (updateError) {
       return errorResponse(updateError.message, 400, "PROFILE_UPDATE_FAILED");
