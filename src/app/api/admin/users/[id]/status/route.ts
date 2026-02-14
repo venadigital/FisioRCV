@@ -10,6 +10,12 @@ function errorResponse(error: string, status: number, code: string) {
   return NextResponse.json({ error, code }, { status });
 }
 
+function isMissingIsPrimaryColumn(error: { code?: string; message?: string } | null | undefined) {
+  if (!error) return false;
+  if (error.code === "42703") return true;
+  return (error.message ?? "").includes("patient_assignments.is_primary");
+}
+
 export async function PATCH(request: Request, routeContext: { params: Promise<{ id: string }> }) {
   try {
     const context = await getApiUserContext();
@@ -83,13 +89,29 @@ export async function PATCH(request: Request, routeContext: { params: Promise<{ 
         .eq("is_primary", true)
         .limit(1);
 
-      if (assignmentsError) {
+      let hasBlockingAssignments = (activePrimaryAssignments ?? []).length > 0;
+
+      if (assignmentsError && isMissingIsPrimaryColumn(assignmentsError)) {
+        const { data: legacyAssignments, error: legacyAssignmentsError } = await admin
+          .from("patient_assignments")
+          .select("id")
+          .eq("clinic_id", targetProfile.clinic_id)
+          .eq("therapist_id", userId)
+          .eq("active", true)
+          .limit(1);
+
+        if (legacyAssignmentsError) {
+          return errorResponse(legacyAssignmentsError.message, 400, "ASSIGNMENT_LOOKUP_FAILED");
+        }
+
+        hasBlockingAssignments = (legacyAssignments ?? []).length > 0;
+      } else if (assignmentsError) {
         return errorResponse(assignmentsError.message, 400, "ASSIGNMENT_LOOKUP_FAILED");
       }
 
-      if ((activePrimaryAssignments ?? []).length > 0) {
+      if (hasBlockingAssignments) {
         return errorResponse(
-          "No puedes desactivar este terapeuta porque tiene pacientes con asignación principal activa",
+          "No puedes desactivar este terapeuta porque tiene pacientes activos asignados. Reasigna esos pacientes primero.",
           409,
           "THERAPIST_HAS_PRIMARY_ASSIGNMENTS",
         );

@@ -6,6 +6,13 @@ import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/auth/server";
 
 type RoleLabel = "admin" | "therapist" | "patient" | "sin rol";
+type AssignmentRow = { patient_id: string; therapist_id: string; is_primary: boolean; active: boolean };
+
+function isMissingIsPrimaryColumn(error: { code?: string; message?: string } | null | undefined) {
+  if (!error) return false;
+  if (error.code === "42703") return true;
+  return (error.message ?? "").includes("patient_assignments.is_primary");
+}
 
 function roleTag(role: RoleLabel) {
   if (role === "admin") {
@@ -37,7 +44,7 @@ export default async function AdminUsersPage() {
   const context = await requireRole("admin");
   const supabase = await createClient();
 
-  const [profilesResult, rolesResult, assignmentsResult] = await Promise.all([
+  const [profilesResult, rolesResult] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, full_name, phone, active")
@@ -45,16 +52,35 @@ export default async function AdminUsersPage() {
       .order("created_at", { ascending: false })
       .limit(80),
     supabase.from("user_roles").select("user_id, role"),
-    supabase
-      .from("patient_assignments")
-      .select("patient_id, therapist_id, is_primary, active")
-      .eq("clinic_id", context.clinicId)
-      .eq("active", true),
   ]);
+
+  let activeAssignments: AssignmentRow[] = [];
+
+  const assignmentsResult = await supabase
+    .from("patient_assignments")
+    .select("patient_id, therapist_id, is_primary, active")
+    .eq("clinic_id", context.clinicId)
+    .eq("active", true);
+
+  if (!assignmentsResult.error) {
+    activeAssignments = (assignmentsResult.data ?? []) as AssignmentRow[];
+  } else if (isMissingIsPrimaryColumn(assignmentsResult.error)) {
+    const legacyAssignmentsResult = await supabase
+      .from("patient_assignments")
+      .select("patient_id, therapist_id, active")
+      .eq("clinic_id", context.clinicId)
+      .eq("active", true);
+
+    activeAssignments = (legacyAssignmentsResult.data ?? []).map((assignment) => ({
+      patient_id: assignment.patient_id,
+      therapist_id: assignment.therapist_id,
+      active: assignment.active,
+      is_primary: false,
+    }));
+  }
 
   const profiles = profilesResult.data ?? [];
   const roles = rolesResult.data ?? [];
-  const activeAssignments = assignmentsResult.data ?? [];
 
   const roleMap = new Map(roles.map((item) => [item.user_id, item.role]));
   const visibleRows = profiles.slice(0, 20);
