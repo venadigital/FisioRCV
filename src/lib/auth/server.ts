@@ -4,7 +4,12 @@ import { AppRole, UserContext } from "@/lib/types";
 import { roleHomePath } from "@/lib/utils";
 
 export async function getUserContext(): Promise<UserContext | null> {
-  const supabase = await createClient();
+  let supabase;
+  try {
+    supabase = await createClient();
+  } catch {
+    return null;
+  }
   const {
     data: { user },
   } = await supabase.auth.getUser();

@@ -1,12 +1,19 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { resolveSupabaseAnonKey, resolveSupabaseUrl } from "@/lib/supabase/config";
 
 export async function createClient() {
   const cookieStore = await cookies();
+  const supabaseUrl = resolveSupabaseUrl();
+  const supabaseAnonKey = resolveSupabaseAnonKey();
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error("Missing Supabase public config at runtime");
+  }
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
