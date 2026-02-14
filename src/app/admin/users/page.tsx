@@ -4,7 +4,6 @@ import { AdminUserStatusToggle } from "@/components/forms/admin-user-status-togg
 import { Card } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 type RoleLabel = "admin" | "therapist" | "patient" | "sin rol";
 type AssignmentRow = { patient_id: string; therapist_id: string; is_primary: boolean; active: boolean };
@@ -44,7 +43,6 @@ function stateTag(active: boolean) {
 export default async function AdminUsersPage() {
   const context = await requireRole("admin");
   const supabase = await createClient();
-  const admin = createAdminClient();
 
   const [profilesResult, rolesResult, clinicsResult] = await Promise.all([
     supabase
@@ -54,7 +52,7 @@ export default async function AdminUsersPage() {
       .order("created_at", { ascending: false })
       .limit(80),
     supabase.from("user_roles").select("user_id, role"),
-    admin.from("clinics").select("id, name, active").eq("active", true).order("name", { ascending: true }),
+    supabase.from("clinics").select("id, name, active").eq("active", true).order("name", { ascending: true }),
   ]);
 
   let activeAssignments: AssignmentRow[] = [];
