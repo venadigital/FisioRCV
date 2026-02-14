@@ -12,7 +12,7 @@ export async function updateSession(request: NextRequest) {
   });
 
   try {
-    const supabase = createServerClient(
+    createServerClient(
       resolveSupabaseUrl(),
       resolveSupabaseAnonKey(),
       {
@@ -32,8 +32,6 @@ export async function updateSession(request: NextRequest) {
         },
       },
     );
-
-    await supabase.auth.getUser();
   } catch {
     return NextResponse.next({ request });
   }
