@@ -16,7 +16,7 @@ export async function getUserContext(): Promise<UserContext | null> {
   const [profileResult, roleResult] = await Promise.all([
     supabase
       .from("profiles")
-      .select("clinic_id, full_name, phone")
+      .select("clinic_id, full_name, phone, active")
       .eq("id", user.id)
       .maybeSingle(),
     supabase
@@ -27,8 +27,9 @@ export async function getUserContext(): Promise<UserContext | null> {
   ]);
 
   const role = roleResult.data?.role as AppRole | undefined;
+  const isActive = profileResult.data?.active ?? false;
 
-  if (!role) {
+  if (!role || !isActive) {
     return null;
   }
 
@@ -39,6 +40,7 @@ export async function getUserContext(): Promise<UserContext | null> {
     clinicId: profileResult.data?.clinic_id ?? null,
     fullName: profileResult.data?.full_name ?? null,
     phone: profileResult.data?.phone ?? null,
+    active: true,
   };
 }
 

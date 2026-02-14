@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 
 type Option = {
   id: string;
@@ -31,19 +32,24 @@ export function AppointmentForm({
     const scheduledAtValue = formData.get("scheduledAt") as string;
     const scheduledAt = new Date(scheduledAtValue);
 
-    const response = await fetch("/api/appointments", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        patientId: formData.get("patientId"),
-        therapistId: formData.get("therapistId"),
-        clinicId: formData.get("clinicId") || defaultClinicId,
-        scheduledAtUtc: scheduledAt.toISOString(),
-      }),
-    });
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patientId: formData.get("patientId"),
+          therapistId: formData.get("therapistId"),
+          clinicId: formData.get("clinicId") || defaultClinicId,
+          scheduledAtUtc: scheduledAt.toISOString(),
+        }),
+      });
 
-    const json = await response.json();
-    setMessage(response.ok ? "Cita creada" : json.error ?? "No se pudo crear");
+      const json = await safeParseJson<{ error?: string }>(response);
+      setMessage(response.ok ? "Cita creada" : getApiErrorMessage(json, "No se pudo crear"));
+    } catch {
+      setMessage("Error de red. Intenta nuevamente.");
+    }
+
     setLoading(false);
   }
 

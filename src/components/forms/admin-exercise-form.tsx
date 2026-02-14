@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 
 export function AdminExerciseForm() {
   const router = useRouter();
@@ -32,21 +33,27 @@ export function AdminExerciseForm() {
       difficulty: formData.get("difficulty"),
     };
 
-    const response = await fetch("/api/therapist/exercises", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch("/api/therapist/exercises", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const json = await response.json();
-    if (response.ok) {
-      setMessage("Ejercicio guardado correctamente");
-      formRef.current?.reset();
-      router.refresh();
-    } else {
+      const json = await safeParseJson<{ error?: string }>(response);
+      if (response.ok) {
+        setMessage("Ejercicio guardado correctamente");
+        formRef.current?.reset();
+        router.refresh();
+      } else {
+        setIsError(true);
+        setMessage(getApiErrorMessage(json, "No se pudo guardar"));
+      }
+    } catch {
       setIsError(true);
-      setMessage(json.error ?? "No se pudo guardar");
+      setMessage("Error de red. Intenta nuevamente.");
     }
+
     setLoading(false);
   }
 

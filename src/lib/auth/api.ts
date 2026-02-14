@@ -13,11 +13,13 @@ export async function getApiUserContext(): Promise<UserContext | null> {
 
   const [roleResult, profileResult] = await Promise.all([
     supabase.from("user_roles").select("role").eq("user_id", user.id).maybeSingle(),
-    supabase.from("profiles").select("clinic_id, full_name, phone").eq("id", user.id).maybeSingle(),
+    supabase.from("profiles").select("clinic_id, full_name, phone, active").eq("id", user.id).maybeSingle(),
   ]);
 
   const role = roleResult.data?.role as AppRole | undefined;
-  if (!role) {
+  const isActive = profileResult.data?.active ?? false;
+
+  if (!role || !isActive) {
     return null;
   }
 
@@ -28,6 +30,7 @@ export async function getApiUserContext(): Promise<UserContext | null> {
     fullName: profileResult.data?.full_name ?? null,
     phone: profileResult.data?.phone ?? null,
     email: user.email ?? null,
+    active: true,
   };
 }
 

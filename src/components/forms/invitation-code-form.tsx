@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 
 export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
   const [message, setMessage] = useState<string | null>(null);
@@ -20,18 +21,23 @@ export function InvitationCodeForm({ clinicId }: { clinicId: string }) {
         : null,
     };
 
-    const response = await fetch("/api/admin/invitation-codes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch("/api/admin/invitation-codes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const json = await response.json();
-    if (response.ok) {
-      setMessage(`Código generado: ${json.invitationCode}`);
-    } else {
-      setMessage(json.error ?? "No se pudo generar");
+      const json = await safeParseJson<{ invitationCode?: string; error?: string }>(response);
+      if (response.ok) {
+        setMessage(`Código generado: ${json?.invitationCode ?? "-"}`);
+      } else {
+        setMessage(getApiErrorMessage(json, "No se pudo generar"));
+      }
+    } catch {
+      setMessage("Error de red. Intenta nuevamente.");
     }
+
     setLoading(false);
   }
 

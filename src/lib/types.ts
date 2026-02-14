@@ -28,6 +28,7 @@ export type UserContext = {
   fullName: string | null;
   phone: string | null;
   email: string | null;
+  active: boolean;
 };
 
 export type NavItem = {
