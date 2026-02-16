@@ -10,7 +10,9 @@ import { loginSchema } from "@/lib/validations";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getApiErrorMessage, safeParseJson } from "@/lib/http";
+import { AppRole } from "@/lib/types";
+import { roleHomePath } from "@/lib/utils";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 type FormData = z.infer<typeof loginSchema>;
 
@@ -43,20 +45,72 @@ export function LoginForm() {
     }
 
     const accessToken = signInData.session?.access_token;
-    const response = await fetch("/api/auth/me", {
-      cache: "no-store",
-      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
-    });
+    const userId = signInData.user?.id;
 
-    const json = await safeParseJson<{ error?: string; homePath?: string }>(response);
-
-    if (!response.ok) {
-      setError(getApiErrorMessage(json, "No se pudo cargar el perfil del usuario"));
+    if (!accessToken || !userId) {
+      setError("No se pudo validar la sesión. Intenta nuevamente.");
       setLoading(false);
       return;
     }
 
-    router.replace(json?.homePath ?? "/");
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!url || !anonKey) {
+      setError("Configuración de autenticación incompleta.");
+      setLoading(false);
+      return;
+    }
+
+    const tokenClient = createSupabaseClient(url, anonKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+
+    const [roleResult, profileResult] = await Promise.all([
+      tokenClient.from("user_roles").select("role").eq("user_id", userId).maybeSingle(),
+      tokenClient.from("profiles").select("active").eq("id", userId).maybeSingle(),
+    ]);
+
+    if (roleResult.error) {
+      setError(`No se pudo cargar el rol del usuario: ${roleResult.error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    const role = roleResult.data?.role as AppRole | undefined;
+    if (!role) {
+      setError("Tu cuenta no tiene rol asignado. Contacta al administrador.");
+      setLoading(false);
+      return;
+    }
+
+    if (profileResult.error) {
+      setError(`No se pudo cargar el perfil del usuario: ${profileResult.error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    if (!profileResult.data) {
+      setError("Tu cuenta no tiene perfil clínico.");
+      setLoading(false);
+      return;
+    }
+
+    if (profileResult.data.active === false) {
+      setError("Tu cuenta está inactiva. Contacta al administrador.");
+      setLoading(false);
+      return;
+    }
+
+    router.replace(roleHomePath(role));
     router.refresh();
   }
 
