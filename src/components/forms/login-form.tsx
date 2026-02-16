@@ -115,7 +115,7 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <label className="mb-2 block text-3xl font-semibold text-[#1f2a45]">Correo</label>
         <Input
