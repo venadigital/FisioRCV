@@ -45,45 +45,57 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "No autenticado" }, { status: 401 });
     }
 
-    try {
-      const admin = createAdminClient();
+    const [roleResultWithToken, profileResultWithToken] = await Promise.all([
+      tokenClient.from("user_roles").select("role").eq("user_id", user.id).maybeSingle(),
+      tokenClient.from("profiles").select("clinic_id, full_name, phone, active").eq("id", user.id).maybeSingle(),
+    ]);
 
-      const [roleResult, profileResult] = await Promise.all([
-        admin.from("user_roles").select("role").eq("user_id", user.id).maybeSingle(),
-        admin.from("profiles").select("clinic_id, full_name, phone, active").eq("id", user.id).maybeSingle(),
-      ]);
+    let roleResult = roleResultWithToken;
+    let profileResult = profileResultWithToken;
 
-      if (roleResult.error) {
-        return NextResponse.json({ error: "No se pudo cargar el rol del usuario" }, { status: 500 });
+    if (roleResult.error || profileResult.error) {
+      try {
+        const admin = createAdminClient();
+        const [roleResultWithAdmin, profileResultWithAdmin] = await Promise.all([
+          admin.from("user_roles").select("role").eq("user_id", user.id).maybeSingle(),
+          admin.from("profiles").select("clinic_id, full_name, phone, active").eq("id", user.id).maybeSingle(),
+        ]);
+
+        roleResult = roleResultWithAdmin;
+        profileResult = profileResultWithAdmin;
+      } catch {
+        // Ignore fallback failure, token query errors are handled below.
       }
-
-      const role = roleResult.data?.role as AppRole | undefined;
-      if (!role) {
-        return NextResponse.json({ error: "Tu cuenta no tiene rol asignado" }, { status: 403 });
-      }
-
-      if (profileResult.error) {
-        return NextResponse.json({ error: "No se pudo cargar el perfil del usuario" }, { status: 500 });
-      }
-
-      if (!profileResult.data) {
-        return NextResponse.json({ error: "Tu cuenta no tiene perfil clínico" }, { status: 403 });
-      }
-
-      if (!profileResult.data.active) {
-        return NextResponse.json({ error: "Tu cuenta está inactiva. Contacta al administrador." }, { status: 403 });
-      }
-
-      return NextResponse.json({
-        role,
-        homePath: roleHomePath(role),
-        clinicId: profileResult.data.clinic_id,
-        fullName: profileResult.data.full_name,
-        email: user.email ?? null,
-      });
-    } catch {
-      return NextResponse.json({ error: "Error interno al validar sesión" }, { status: 500 });
     }
+
+    if (roleResult.error) {
+      return NextResponse.json({ error: "No se pudo cargar el rol del usuario" }, { status: 500 });
+    }
+
+    const role = roleResult.data?.role as AppRole | undefined;
+    if (!role) {
+      return NextResponse.json({ error: "Tu cuenta no tiene rol asignado" }, { status: 403 });
+    }
+
+    if (profileResult.error) {
+      return NextResponse.json({ error: "No se pudo cargar el perfil del usuario" }, { status: 500 });
+    }
+
+    if (!profileResult.data) {
+      return NextResponse.json({ error: "Tu cuenta no tiene perfil clínico" }, { status: 403 });
+    }
+
+    if (!profileResult.data.active) {
+      return NextResponse.json({ error: "Tu cuenta está inactiva. Contacta al administrador." }, { status: 403 });
+    }
+
+    return NextResponse.json({
+      role,
+      homePath: roleHomePath(role),
+      clinicId: profileResult.data.clinic_id,
+      fullName: profileResult.data.full_name,
+      email: user.email ?? null,
+    });
   }
 
   const context = await getApiUserContext();
