@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,30 @@ type AdminCreateUserFormProps = {
   clinics: ClinicOption[];
 };
 
+type RuntimeCheckResponse = {
+  canCreateUsers?: boolean;
+  missing?: string[];
+  error?: string;
+  code?: string;
+};
+
+function formatMissingEnvLabel(missing: string[]) {
+  if (missing.length === 0) return "`SUPABASE_SECRET_KEY`";
+  return missing.map((name) => `\`${name}\``).join(", ");
+}
+
+function mapCreateUserError(payload: RuntimeCheckResponse | null) {
+  const code = payload?.code;
+  if (code === "MISSING_SERVICE_ROLE_ENV") {
+    return "Configuración incompleta del servidor para crear usuarios. Configura `SUPABASE_SECRET_KEY` en Hostinger y vuelve a desplegar.";
+  }
+  if (code === "PATIENT_CLINICS_TABLE_MISSING") {
+    return "Falta la migración `patient_clinics` en producción. Ejecuta migraciones pendientes y reintenta.";
+  }
+
+  return getApiErrorMessage(payload, "No se pudo crear el usuario");
+}
+
 export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -26,6 +50,48 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<"therapist" | "admin" | "patient">("therapist");
   const [selectedPatientClinicIds, setSelectedPatientClinicIds] = useState<string[]>([clinicId]);
+  const [runtimeChecked, setRuntimeChecked] = useState(false);
+  const [canCreateUsers, setCanCreateUsers] = useState(true);
+  const [runtimeMissing, setRuntimeMissing] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkRuntime() {
+      try {
+        const response = await fetch("/api/admin/runtime-check", {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const payload = await safeParseJson<RuntimeCheckResponse>(response);
+        if (cancelled) return;
+
+        if (!response.ok) {
+          setCanCreateUsers(true);
+          setRuntimeMissing([]);
+          setRuntimeChecked(true);
+          return;
+        }
+
+        const enabled = Boolean(payload?.canCreateUsers);
+        setCanCreateUsers(enabled);
+        setRuntimeMissing(payload?.missing ?? []);
+        setRuntimeChecked(true);
+      } catch {
+        if (cancelled) return;
+        setCanCreateUsers(true);
+        setRuntimeMissing([]);
+        setRuntimeChecked(true);
+      }
+    }
+
+    void checkRuntime();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function togglePatientClinic(clinicOptionId: string) {
     setSelectedPatientClinicIds((previous) =>
@@ -39,6 +105,15 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
     setLoading(true);
     setMessage(null);
     setIsError(false);
+
+    if (runtimeChecked && !canCreateUsers) {
+      setIsError(true);
+      setMessage(
+        `No puedes crear usuarios todavía. Configura ${formatMissingEnvLabel(runtimeMissing)} en Hostinger y vuelve a desplegar.`,
+      );
+      setLoading(false);
+      return;
+    }
 
     const password = String(formData.get("password") ?? "");
     const confirmPassword = String(formData.get("confirmPassword") ?? "");
@@ -74,7 +149,7 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
         body: JSON.stringify(payload),
       });
 
-      const json = await safeParseJson<{ error?: string }>(response);
+      const json = await safeParseJson<RuntimeCheckResponse>(response);
 
       if (response.ok) {
         setMessage("Usuario creado correctamente");
@@ -84,7 +159,7 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
         router.refresh();
       } else {
         setIsError(true);
-        setMessage(getApiErrorMessage(json, "No se pudo crear el usuario"));
+        setMessage(mapCreateUserError(json));
       }
     } catch {
       setIsError(true);
@@ -179,6 +254,16 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
         </div>
       ) : null}
 
+      {runtimeChecked && !canCreateUsers ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <p className="font-semibold">Configuración requerida para crear usuarios</p>
+          <p className="mt-1">
+            Configura {formatMissingEnvLabel(runtimeMissing)} en Hostinger y vuelve a desplegar para habilitar este
+            formulario.
+          </p>
+        </div>
+      ) : null}
+
       {message ? (
         <p
           className={
@@ -193,7 +278,7 @@ export function AdminCreateUserForm({ clinicId, clinics }: AdminCreateUserFormPr
 
       <Button
         type="submit"
-        disabled={loading}
+        disabled={loading || (runtimeChecked && !canCreateUsers)}
         className="h-12 rounded-xl bg-[#0e7a9a] px-8 text-base font-semibold text-white hover:bg-[#0b6682]"
       >
         {loading ? "Guardando..." : "Crear usuario"}

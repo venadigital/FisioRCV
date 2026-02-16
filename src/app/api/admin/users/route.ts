@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getApiUserContext } from "@/lib/auth/api";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  createAdminClient,
+  isInvalidServiceRoleKeyError,
+  isMissingServiceRoleEnvError,
+} from "@/lib/supabase/admin";
 import { adminCreateUserSchema } from "@/lib/validations";
 
 function errorResponse(error: string, status: number, code: string) {
@@ -114,6 +118,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, userId, clinicIds: uniqueClinicIds });
   } catch (error) {
+    if (isMissingServiceRoleEnvError(error) || isInvalidServiceRoleKeyError(error)) {
+      return errorResponse(
+        "Configuración incompleta del servidor para crear usuarios",
+        500,
+        "MISSING_SERVICE_ROLE_ENV",
+      );
+    }
+
     const message = error instanceof Error ? error.message : "Error interno del servidor";
     return errorResponse(message, 500, "INTERNAL_ERROR");
   }
