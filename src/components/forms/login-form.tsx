@@ -10,8 +10,7 @@ import { loginSchema } from "@/lib/validations";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { roleHomePath } from "@/lib/utils";
-import { AppRole } from "@/lib/types";
+import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 
 type FormData = z.infer<typeof loginSchema>;
 
@@ -43,44 +42,21 @@ export function LoginForm() {
       return;
     }
 
-    const userId = signInData.user?.id;
-    if (!userId) {
-      setError("No se pudo validar la sesión del usuario");
+    const accessToken = signInData.session?.access_token;
+    const response = await fetch("/api/auth/me", {
+      cache: "no-store",
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+    });
+
+    const json = await safeParseJson<{ error?: string; homePath?: string }>(response);
+
+    if (!response.ok) {
+      setError(getApiErrorMessage(json, "No se pudo cargar el perfil del usuario"));
       setLoading(false);
       return;
     }
 
-    const [roleResult, profileResult] = await Promise.all([
-      supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle(),
-      supabase.from("profiles").select("active").eq("id", userId).maybeSingle(),
-    ]);
-
-    if (roleResult.error) {
-      setError("No se pudo cargar el rol del usuario");
-      setLoading(false);
-      return;
-    }
-
-    const role = roleResult.data?.role as AppRole | undefined;
-    if (!role) {
-      setError("Tu cuenta no tiene rol asignado. Contacta al administrador.");
-      setLoading(false);
-      return;
-    }
-
-    if (profileResult.error) {
-      setError("No se pudo cargar el perfil del usuario");
-      setLoading(false);
-      return;
-    }
-
-    if (profileResult.data && profileResult.data.active === false) {
-      setError("Tu cuenta está inactiva. Contacta al administrador.");
-      setLoading(false);
-      return;
-    }
-
-    router.replace(roleHomePath(role));
+    router.replace(json?.homePath ?? "/");
     router.refresh();
   }
 
