@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/lib/supabase/client";
 import { loginSchema } from "@/lib/validations";
+import { getApiErrorMessage, safeParseJson } from "@/lib/http";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +31,7 @@ export function LoginForm() {
     setError(null);
 
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     });
@@ -41,15 +42,21 @@ export function LoginForm() {
       return;
     }
 
-    const response = await fetch("/api/auth/me", { cache: "no-store" });
+    const accessToken = signInData.session?.access_token;
+    const response = await fetch("/api/auth/me", {
+      cache: "no-store",
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+    });
+
+    const json = await safeParseJson<{ error?: string; homePath?: string }>(response);
+
     if (!response.ok) {
-      setError("No se pudo cargar el perfil del usuario");
+      setError(getApiErrorMessage(json, "No se pudo cargar el perfil del usuario"));
       setLoading(false);
       return;
     }
 
-    const json = await response.json();
-    router.replace(json.homePath);
+    router.replace(json?.homePath ?? "/");
     router.refresh();
   }
 
