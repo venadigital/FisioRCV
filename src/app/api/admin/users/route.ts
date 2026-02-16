@@ -11,6 +11,21 @@ function errorResponse(error: string, status: number, code: string) {
   return NextResponse.json({ error, code }, { status });
 }
 
+function isPatientClinicsMissingTableError(error: { code?: string; message?: string } | null) {
+  if (!error) return false;
+
+  if (error.code === "42P01" || error.code === "PGRST205" || error.code === "PGRST204") {
+    return true;
+  }
+
+  const message = error.message?.toLowerCase() ?? "";
+  return message.includes("patient_clinics") && (
+    message.includes("does not exist") ||
+    message.includes("could not find the table") ||
+    message.includes("schema cache")
+  );
+}
+
 export async function POST(request: Request) {
   try {
     const context = await getApiUserContext();
@@ -104,7 +119,7 @@ export async function POST(request: Request) {
       if (patientClinicsError) {
         await admin.auth.admin.deleteUser(userId).catch(() => undefined);
 
-        if (patientClinicsError.code === "42P01") {
+        if (isPatientClinicsMissingTableError(patientClinicsError)) {
           return errorResponse(
             "Falta la migración de patient_clinics en la base de datos de producción",
             500,
