@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -74,6 +75,11 @@ export function LoginForm() {
           className="h-16 rounded-2xl border-slate-300 px-5 text-2xl"
         />
         {errors.password ? <p className="mt-2 text-xl text-rose-700">{errors.password.message}</p> : null}
+        <div className="mt-2 text-right">
+          <Link href="/reset-password" className="text-lg font-medium text-[#4d74b9] hover:text-[#3f64a8]">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
       </div>
 
       {error ? <p className="text-xl text-rose-700">{error}</p> : null}

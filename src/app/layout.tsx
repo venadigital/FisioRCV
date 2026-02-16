@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Sora, Source_Sans_3 } from "next/font/google";
+import { RecoveryTokenRedirect } from "@/components/auth/recovery-token-redirect";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${sora.variable} ${sourceSans.variable} bg-slate-50 text-slate-900 antialiased`}>
+        <RecoveryTokenRedirect />
         <Providers>{children}</Providers>
       </body>
     </html>
