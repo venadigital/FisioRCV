@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { ResetPasswordForm } from "@/components/forms/reset-password-form";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function LogoMark() {
   return (
     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#4d74b9] text-xl text-white shadow-sm">
